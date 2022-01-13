@@ -832,25 +832,25 @@ Eg:
 
 ## color
 
-|  颜色   |   原型    |                        预览                         |
-| :-----: | :-------: | :-------------------------------------------------: |
-|   333   | `#333333` |  <span style="font-size:36px;color:#333">■</span>   |
-|   666   | `#666666` |  <span style="font-size:36px;color:#666">■</span>   |
-|   999   | `#999999` |  <span style="font-size:36px;color:#999">■</span>   |
-|   e5e   | `#e5e5e5` | <span style="font-size:36px;color:#e5e5e5">■</span> |
-|   f4f   | `#f4f4f4` | <span style="font-size:36px;color:#f4f4f4">■</span> |
-|  white  | `#ffffff` |  <span style="font-size:36px;color:#fff">■</span>   |
-|   red   | `#ff0000` |   <span style="font-size:36px;color:red">■</span>   |
-|   org   | `#ff8400` | <span style="font-size:36px;color:#ff8400">■</span> |
-|  green  | `#008000` |  <span style="font-size:36px;color:green">■</span>  |
-|  blue   | `#0000ff` |  <span style="font-size:36px;color:blue">■</span>   |
-|  grey   | `#cccccc` |  <span style="font-size:36px;color:#ccc">■</span>   |
-| default | `#666666` |  <span style="font-size:36px;color:#666">■</span>   |
-| primary | `#337ab7` | <span style="font-size:36px;color:#337ab7">■</span> |
-|  info   | `#5bc0de` | <span style="font-size:36px;color:#5bc0de">■</span> |
-| success | `#44cb7f` | <span style="font-size:36px;color:#44cb7f">■</span> |
-| warning | `#ff8400` | <span style="font-size:36px;color:#ff8400">■</span> |
-| danger  | `#fe6270` | <span style="font-size:36px;color:#fe6270">■</span> |
+|  颜色   |   原型    |                    预览                    |
+| :-----: | :-------: | :----------------------------------------: |
+|   333   | `#333333` | <font size=6>$\color{#333333} {■} $</font> |
+|   666   | `#666666` | <font size=6>$\color{#666666} {■} $</font> |
+|   999   | `#999999` | <font size=6>$\color{#999999} {■} $</font> |
+|   e5e   | `#e5e5e5` | <font size=6>$\color{#e5e5e5} {■} $</font> |
+|   f4f   | `#f4f4f4` | <font size=6>$\color{#f4f4f4} {■} $</font> |
+|  white  | `#ffffff` | <font size=6>$\color{#ffffff} {■} $</font> |
+|   red   | `#ff0000` | <font size=6>$\color{#ff0000} {■} $</font> |
+|   org   | `#ff8400` | <font size=6>$\color{#ff8400} {■} $</font> |
+|  green  | `#008000` | <font size=6>$\color{#008000} {■} $</font> |
+|  blue   | `#0000ff` | <font size=6>$\color{#0000ff} {■} $</font> |
+|  grey   | `#cccccc` | <font size=6>$\color{#cccccc} {■} $</font> |
+| default | `#666666` | <font size=6>$\color{#666666} {■} $</font> |
+| primary | `#337ab7` | <font size=6>$\color{#337ab7} {■} $</font> |
+|  info   | `#5bc0de` | <font size=6>$\color{#5bc0de} {■} $</font> |
+| success | `#44cb7f` | <font size=6>$\color{#44cb7f} {■} $</font> |
+| warning | `#ff8400` | <font size=6>$\color{#ff8400} {■} $</font> |
+| danger  | `#fe6270` | <font size=6>$\color{#fe6270} {■} $</font> |
 
 ## 脚注
 
