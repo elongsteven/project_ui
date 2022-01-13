@@ -1,22 +1,14 @@
 # project.css
 
 #### Description
-为快速搭建各大前端项目必备的层叠样式表
+A Cascading Style Sheets for quickly building front-end projects
 
 #### Software Architecture
 Software architecture description
 
-#### Installation
+#### Direction For Use
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### Instructions
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+- [uni-project](uni-project/uni-project.md)
 
 #### Contribution
 
@@ -25,12 +17,7 @@ Software architecture description
 3.  Commit your code
 4.  Create Pull Request
 
-
-#### Gitee Feature
-
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+#### About
+- Most of the style class names in this style library are separated and encapsulated, and most of the class names are presented as the abbreviation of the full name of the prototype style or pronunciation abbreviation, which is easy to get started quickly.
+- The advantages of this style library: Class names wrapped separately provide high combination flexibility, code readability, and later maintainability.
+- The drawbacks are also obvious: Some tags may require a lots of class names to meet specific styling requirements of the demander.

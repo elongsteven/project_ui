@@ -1,23 +1,12 @@
 # project.css
 
 #### 介绍
-为快速搭建各大前端项目必备的层叠样式表
 
-#### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+为快速搭建前端项目必备的层叠样式表
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+- [uni-project](uni-project/uni-project.md)
 
 #### 参与贡献
 
@@ -26,12 +15,13 @@
 3.  提交代码
 4.  新建 Pull Request
 
+#### 关于
 
-#### 特技
+- 本样式库中的样式类名大多都是分离封装的，且类名呈现方式大多为**原型样式全名的缩写**或发音缩写而来的，便于快速上手
+- 本样式库的优点：分离式封装的类名具有极高的组合灵活性、代码可读性和后期维护性
+- 而缺点也很显而易见：某些标签可能为满足需求方特殊的样式要求，会需要写很长一串类名
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+#### 致每一位不平凡的开发者
+
+- 这是一个开源的仓库，只是为了大家能够更便捷的 "创建" 页面而存在，欢迎大家前来 Fork，版权信息保留与否看心情吧，毕竟我们都算是同志嘛 `^_^`
+- 如果有任何好的建议或是对本样式库的意见，欢迎在下面进行 [评论](https://gitee.com/elong_steven/project.css#tree_comm_title)，或者在 `idea` 目录下以文件的方式进行留言。万分感谢
