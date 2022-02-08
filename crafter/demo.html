@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,Chrome=1" />
+  <script src="./craft.js"></script>
+  <title>DEMO</title>
+</head>
+
+<body>
+  <div></div>
+  <script>
+    // var list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    // console.log(window.craft.randomList(list, false));
+    // console.log();
+    // console.log();
+    // console.log(window.craft.getQuery());
+    // window.craft.linkTo("www.bbbb.com", function (event) {
+    //   console.log(event.detail, 3333)
+    // })
+
+    /**
+     * 第一种跳转
+     * pros: 若不挂载方法，则自动直接跳转
+     * cons: 想要处理后再跳转，每次执行都必须挂载方法
+     */
+    function tea(event) {
+      console.log(event.detail)
+    }
+    window.craft.linkTo("https://www.baidu.com/", tea);
+
+    /**
+     * 第二种跳转
+     * pros: 从不需要挂载方法
+     * cons: 若想直接跳转，需挂载自定义方法
+     */
+    window.craft.link("https://www.baidu.com/")
+    window.craft.linkFn(function (event) {
+      console.log(event.detail)
+    })
+
+/** 需求
+ *  1. 支持传入URL直接跳转
+ *  2. 可自选跳转方式
+ *  3. 可传入自定义方法，执行后再进行跳转
+ */
+
+
+    window.craft.Fn()
+  </script>
+</body>
+
+</html>
