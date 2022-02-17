@@ -9,6 +9,7 @@
  * @Func    this.$prompt.success(txt, opts);          状态弹窗：成功信息 同this.$prompt.status(text, opts, 1);
  * @Func    this.$prompt.info(txt, opts);             状态弹窗：提示信息 同this.$prompt.status(text, opts, 2);
  * @Func    this.$prompt.question(txt, opts);         状态弹窗：问题信息 同this.$prompt.status(text, opts, 3);
+ * @Func    this.$prompt.modal();                     创建一个modal弹框，此弹框不同于其他任何弹框，配置项也均为独立存在，详见 @modal
  * @param   { String }            text                *必填* 弹窗文字内容
  * @param   { Object || Number }  opts                *必填* 显示时长(单位:ms) 或 弹窗配置,属性详见 @opts
  * @param   { Number || String }  status              *可选* 状态弹窗的状态定义 0:错误 1:成功 2:提示 3:问题 也可以传图片路径，如果不写该参数 则表现同于msg弹窗
@@ -29,7 +30,7 @@
  * @return { Object }                                 { text: 内容文字, time: 显示时长 }
  * @Func craft.autoEngine(time);                      自动关闭引擎
  * @Func craft.ArrDebug(arr);                         Debugger 数组调试用工具
- * 
+ *
  *   -   -   -   -   -   -   -   -   -
  * 写在前面：所有的配置项均有默认值，因此 所有的配置项皆为选填项
  * @opts {
@@ -59,6 +60,10 @@
  *    @property { String } loadSize   @default '80rpx'          加载层大小
  *    @property { String } loadClass  @default ''               加载层附加类名
  * }
+ *   -   -   -   -   -   -   -   -   -
+ * @modal {
+ * 
+ * }
  */
 
 import Vue from "vue"
@@ -77,7 +82,7 @@ prompt.msg = function (txt, opts) {
   Vue.nextTick(() => {
     if (typeof opts === "object") instance.showMsg(setting.text, opts, ins)
     else instance.showMsg(setting.text, {}, ins)
-    craft.autoEngine(setting.time, PT)
+    craft.autoEngine(setting.time)
   })
 }
 
@@ -108,7 +113,7 @@ prompt.status = function (txt, opts, status) {
   Vue.nextTick(() => {
     if (typeof opts === "object") instance.showStatus(status, setting.text, opts, ins)
     else instance.showStatus(status, setting.text, {}, ins)
-    craft.autoEngine(setting.time, PT)
+    craft.autoEngine(setting.time)
   })
   return ins
 }
@@ -127,12 +132,12 @@ prompt.load = function (txt, opts) {
 
 // modal 弹窗
 prompt.modal = function (txt, opts) {
-  let time = prompt.timeEngine(opts)
-  let text = prompt.toStr(txt)
+  const PT = 3
+  let setting = craft.settingEngine(txt, opts, PT)
   Vue.nextTick(() => {
-    if (typeof opts === "object") instance.showModal(text, opts, ins)
-    else instance.showModal(text, {}, ins)
-    craft.autoEngine(time)
+    if (typeof opts === "object") instance.showModal(setting.text, opts, ins)
+    else instance.showModal(setting.text, {}, ins)
+    craft.autoEngine(0)
   })
   return ins
 }

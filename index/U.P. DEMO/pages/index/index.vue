@@ -22,12 +22,12 @@
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="$prompt.question('question')">question 弹框</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="$prompt.error('fail')">error 弹框</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.status('请稍后...', { isRow: true }, '../../static/await.png')">自定义status 弹框</view>
+    <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.load('加载中...', { time: 0, isPass: true })">load加载层</view>
+    <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.modal('加载中...', { isPass: true })">modal 选择层</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="$prompt.hide()">关闭弹出的最后一个</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="$prompt.hideAll('ccc')">关闭所有</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.msg($prompt.getOpt())">获取最后一个的弹窗配置</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.msg($prompt.getList())">获取当前弹窗ID列表</view>
-    <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.load('加载中...', { time: 0, isPass: true })">load加载层</view>
-    <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.modal('加载中...', { isPass: true })">modal 选择层</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="t3">测试 3</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="ttt">关闭 2</view>
     <view class="u-h-100vh"></view>
@@ -45,7 +45,7 @@ export default {
     }
   },
   onLoad() {
-    // this.$popShow()
+    this.$prompt.modal({ title: "加载中...", text: "请稍后" }, {})
   },
   methods: {
     t1() {

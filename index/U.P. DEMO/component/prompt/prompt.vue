@@ -78,8 +78,8 @@ export default {
     }
   },
   methods: {
-    // 默认配置引擎  default: 不穿透 无蒙版 可滑动 无点击蒙版关闭
     Engine(txt, opts, index) {
+      // 默认配置引擎  default: 不穿透 无蒙版 可滑动 无点击蒙版关闭
       let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
       let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
       let Z = parseInt(1000 + Number(index))
@@ -123,8 +123,28 @@ export default {
       this.LOAD = config
     },
     showModal(txt, opts, index) {
-      let config = this.Engine(txt, opts, index)
-      this.MODAL = config
+      // modal 弹窗不会使用公用引擎 所有的配置项与默认值均是独立存在的
+      let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
+      let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
+      let Z = parseInt(1000 + Number(index))
+      let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : "") // 蒙版样式计算
+      let PromptStyle = "z-index:" + Z + ";background:" + (opts.bgColor || "rgba(0,0,0,.6)") + ";color:" + (opts.color || "#fff") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
+      this.MODAL = {
+        id: index, // ID
+        show: true,
+        type: 0,
+        pass: isPass ? "u-pe-none" : "u-pe-auto",
+        scroll: opts.scroll === undefined ? true : opts.scroll, // 是否允许滑动
+        isShut: opts.isShut === undefined ? false : opts.isShut, // 是否点击蒙版关闭
+        ani_m: opts.ani_m === undefined ? "fade" : opts.ani_m,
+        ani_c: opts.ani_c === undefined ? "z-fade" : opts.ani_c,
+        txt: txt || "", // 弹窗文字
+        PromptClass: opts.class || "",
+        MaskStyle,
+        PromptStyle,
+        Z,
+        cb: opts.cb,
+      }
     },
     hide(obj) {
       switch (obj.type) {
