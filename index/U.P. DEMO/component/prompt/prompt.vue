@@ -41,7 +41,7 @@
       <view v-if="LOAD.show" class="u-ps-f u-ps-full u-pe-none" :style="{ zIndex: LOAD.Z }">
         <view @click.stop class="prompt0 u-ps-f u-ps-center u-flex u-flex-jc-c u-flex-ai-c u-pd-lr-18rp u-pd-tb-15rp u-t-break u-radius-8rp u-pe-auto" :class="LOAD.PromptClass" :style="LOAD.PromptStyle">
           <!-- 加载动画 *NEW* -->
-          <view class="load-chase" :class="LOAD.LoadClass">
+          <view class="load-chase" :class="LOAD.LoadClass" :style="{ width: LOAD.LoadWidth, height: LOAD.LoadWidth }">
             <view v-for="index of 6" :key="index" class="load-chase-dot" :style="'background:' + LOAD.loadColor"></view>
           </view>
           <view class="u-w-fit u-mg-lr-auto">{{ LOAD.txt }}</view>
@@ -84,7 +84,6 @@ export default {
       let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
       let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
       let Z = parseInt(1000 + Number(index))
-      console.log((isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : ""))
       let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : "") // 蒙版样式计算
       let PromptStyle = "z-index:" + Z + ";background:" + (opts.bgColor || "rgba(0,0,0,.6)") + ";color:" + (opts.color || "#fff") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
       return {
