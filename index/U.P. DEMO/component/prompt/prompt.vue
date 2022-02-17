@@ -70,7 +70,6 @@ export default {
   name: "prompt",
   data() {
     return {
-      // 0:msg  1:status  2:load  3:modal
       MSG: { show: false },
       STAT: { show: false },
       LOAD: { show: false },
@@ -110,9 +109,9 @@ export default {
     showStatus(status, txt, opts, index) {
       let config = this.Engine(txt, opts, index)
       config.PromptClass = (opts.isRow ? "u-flex-d-r" : "u-flex-d-c") + " " + (opts.class || "")
-      config.IconStyle = "width:" + (opts.iconWidth || "80rpx") + (opts.iconColor ? ";filter: drop-shadow(100vw 0 " + opts.iconColor + ");right: 100vw;" : "")
+      config.IconStyle = "width:" + (opts.iconWidth || "80rpx") + (opts.iconColor ? ";filter: drop-shadow(100vw 0 " + opts.iconColor + ");right: 100vw" : "") + ";" + (opts.iconStyle || "")
       config.IconUrl = status !== undefined ? (typeof status === "number" ? this.icon[status] : status) : null
-      config.IconClass = "u-mg-8rp" + (opts.IconClass || "")
+      config.IconClass = "u-mg-8rp" + (opts.iconClass || "")
       this.STAT = config
     },
     showLoad(txt, opts, index) {
@@ -120,7 +119,7 @@ export default {
       config.PromptClass = (opts.isRow ? "u-flex-d-r" : "u-flex-d-c") + " " + (opts.class || "")
       config.LoadClass = "u-mg-24rp" + (opts.loadClass || "")
       config.loadColor = opts.loadColor || "#fff"
-      config.LoadSize = opts.LoadSize || "80rpx"
+      config.LoadSize = opts.loadSize || "80rpx"
       this.LOAD = config
     },
     showModal(txt, opts, index) {
