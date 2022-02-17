@@ -1,23 +1,30 @@
 <template>
   <view>
     <!-- msg -->
-    <transition name="z-fade">
-      <view class="u-ps-f u-ps-full u-pe-none" v-if="MSG.show">
-        <!-- 蒙版与滑动控制 -->
-        <view v-if="!MSG.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: MSG.Z }" @touchmove.stop.prevent="() => {}"></view>
+    <transition name="fade">
+      <view v-if="MSG.show">
+        <view v-if="!MSG.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: MSG.Z - 10 }" @touchmove.stop.prevent="() => {}"></view>
         <view @click="maskTap(MSG.isShut, MSG.type)" class="u-ps-f u-ps-full" :class="MSG.pass" :style="MSG.MaskStyle"></view>
+      </view>
+    </transition>
+    <transition name="z-fade">
+      <view class="u-ps-f u-ps-full u-pe-none" v-if="MSG.show" :style="{ zIndex: MSG.Z }">
         <view @click.stop class="prompt0 u-ps-f u-ps-center u-flex u-flex-jc-c u-flex-ai-c u-pd-lr-18rp u-pd-tb-15rp u-t-break u-radius-8rp u-pe-auto" :class="MSG.PromptClass" :style="MSG.PromptStyle">
           <view class="u-w-fit u-mg-lr-auto">{{ MSG.txt }}</view>
         </view>
       </view>
     </transition>
     <!-- status -->
-    <transition name="z-fade">
-      <view class="u-ps-f u-ps-full u-pe-none" v-if="STAT.show">
-        <!-- 蒙版与滑动控制 -->
-        <view v-if="!STAT.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: STAT.Z }" @touchmove.stop.prevent="() => {}"></view>
+    <transition name="fade">
+      <view v-if="STAT.show">
+        <view v-if="!STAT.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: STAT.Z - 10 }" @touchmove.stop.prevent="() => {}"></view>
         <view @click="maskTap(STAT.isShut, STAT.type)" class="u-ps-f u-ps-full" :class="STAT.pass" :style="STAT.MaskStyle"></view>
+      </view>
+    </transition>
+    <transition name="z-fade">
+      <view class="u-ps-f u-ps-full u-pe-none" v-if="STAT.show" :style="{ zIndex: STAT.Z }">
         <view @click.stop class="prompt0 u-ps-f u-ps-center u-flex u-flex-jc-c u-flex-ai-c u-pd-lr-18rp u-pd-tb-15rp u-t-break u-radius-8rp u-pe-auto" :class="STAT.PromptClass" :style="STAT.PromptStyle">
+          <!-- image+ -->
           <image v-if="STAT.IconUrl" :src="STAT.IconUrl" class="colors u-mg-lr-auto" :class="STAT.IconClass" :style="STAT.IconStyle" mode="widthFix" />
           <view class="u-w-fit u-mg-lr-auto">{{ STAT.txt }}</view>
         </view>
@@ -25,10 +32,13 @@
     </transition>
     <!-- load -->
     <transition name="fade">
-      <view class="u-ps-f u-ps-full u-pe-none" v-if="LOAD.show">
-        <!-- 蒙版与滑动控制 -->
-        <view v-if="!LOAD.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: LOAD.Z }" @touchmove.stop.prevent="() => {}"></view>
+      <view v-if="LOAD.show">
+        <view v-if="!LOAD.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: LOAD.Z - 10 }" @touchmove.stop.prevent="() => {}"></view>
         <view @click="maskTap(LOAD.isShut, LOAD.type)" class="u-ps-f u-ps-full" :class="LOAD.pass" :style="LOAD.MaskStyle"></view>
+      </view>
+    </transition>
+    <transition name="fade">
+      <view class="u-ps-f u-ps-full u-pe-none" v-if="LOAD.show" :style="{ zIndex: LOAD.Z }">
         <view @click.stop class="prompt0 u-ps-f u-ps-center u-flex u-flex-jc-c u-flex-ai-c u-pd-lr-18rp u-pd-tb-15rp u-t-break u-radius-8rp u-pe-auto" :class="LOAD.PromptClass" :style="LOAD.PromptStyle">
           <!-- 加载动画 *NEW* -->
           <view class="load-chase" :class="LOAD.LoadClass">
@@ -66,7 +76,7 @@ export default {
     }
   },
   methods: {
-    // default: 不穿透 无蒙版 可滑动 不关闭
+    // default: 不穿透 无蒙版 可滑动 无点击蒙版关闭
     Engine(txt, opts, index) {
       let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
       let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
@@ -92,7 +102,6 @@ export default {
       let config = this.Engine(txt, opts, index)
       this.MSG = config
     },
-    // $prompt.status  default: 不穿透 无蒙版 可滑动 不关闭
     showStatus(status, txt, opts, index) {
       let config = this.Engine(txt, opts, index)
       config.PromptClass = (opts.isRow ? "u-flex-d-r" : "u-flex-d-c") + " " + (opts.class || "")
@@ -101,7 +110,6 @@ export default {
       config.IconClass = "u-mg-8rp" + (opts.IconClass || "")
       this.STAT = config
     },
-    // $prompt.load  default: 不穿透 无蒙版 可滑动 不关闭
     showLoad(txt, opts, index) {
       let config = this.Engine(txt, opts, index)
       config.PromptClass = (opts.isRow ? "u-flex-d-r" : "u-flex-d-c") + " " + (opts.class || "")
@@ -110,30 +118,9 @@ export default {
       config.LoadWidth = opts.LoadWidth || "80rpx"
       this.LOAD = config
     },
-    // $prompt.modal  default: 不穿透 无蒙版 可滑动 不关闭
     showModal(txt, opts, index) {
-      let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
-      let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
-      let Z = parseInt(1000 + Number(index))
-      let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : "") // 蒙版样式计算
-      let PromptStyle = "z-index:" + Z + ";background:" + (opts.bgColor || "rgba(0,0,0,.6)") + ";color:" + (opts.color || "#fff") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
-      let PromptClass = (opts.isRow ? "u-flex-d-r" : "u-flex-d-c") + " " + (opts.class || "")
-      let LoadClass = "u-mg-24rp" + (opts.loadClass || "")
-      let prompt = {
-        id: index, // ID
-        scroll: opts.scroll === undefined ? true : opts.scroll, // 是否允许滑动
-        isShut: opts.tapHide === undefined ? false : opts.tapHide, // 是否点击蒙版关闭
-        type: 2, // 弹窗类型
-        txt: txt || "", // 弹窗文字
-        loadColor: opts.loadColor || "#fff",
-        LoadWidth: opts.LoadWidth || "80rpx",
-        LoadClass,
-        PromptClass,
-        MaskStyle,
-        PromptStyle,
-        Z,
-        cb: opts.cb,
-      }
+      let config = this.Engine(txt, opts, index)
+      this.MODAL = config
     },
     hide(obj) {
       switch (obj.type) {
