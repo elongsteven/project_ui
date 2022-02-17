@@ -57,8 +57,14 @@
     </transition>
     <transition :name="MODAL.ani_c">
       <view v-if="MODAL.show" class="u-ps-f u-ps-full u-pe-none" :style="{ zIndex: MODAL.Z }">
-        <view @click.stop class="prompt0 u-ps-f u-ps-center u-flex u-flex-jc-c u-flex-ai-c u-pd-lr-18rp u-pd-tb-15rp u-t-break u-radius-8rp u-pe-auto" :class="MODAL.PromptClass" :style="MODAL.PromptStyle">
-          <view class="u-w-fit u-mg-lr-auto">{{ MODAL.txt }}</view>
+        <view @click.stop class="u-w-70 u-ps-f u-ps-center u-t-break u-radius-8rp u-pd-t-24rp u-pe-auto" :class="MODAL.PromptClass" :style="MODAL.PromptStyle">
+          <view class="u-flex u-flex-jc-c u-flex-ai-c u-pd-lr-18rp u-pd-b-21rp u-flex-d-c">
+            <view class="u-w-fit u-f-b u-f-34rp u-mg-b-10rp">{{ MODAL.VTitle }}</view>
+            <view class="u-w-fit">{{ MODAL.VTxt }}</view>
+          </view>
+          <view class="u-w-100 u-flex u-flex-jc-sb u-flex-ai-c u-f-b u-bd-t-grey">
+            <view v-for="(item, index) in MODAL.VBtn" class="u-flex-1 u-t-c u-pd-tb-21rp btnLine" :key="index">{{ item }}</view>
+          </view>
         </view>
       </view>
     </transition>
@@ -78,19 +84,19 @@ export default {
     }
   },
   methods: {
-    Engine(txt, opts, index) {
+    Engine(txt, opts, index, PT) {
       // 默认配置引擎  default: 不穿透 无蒙版 可滑动 无点击蒙版关闭
       let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
       let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
       let isBlur = opts.isBlur === undefined ? true : opts.isBlur // 是否打开底层高斯
       let Z = parseInt(1000 + Number(index))
       let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : "") // 蒙版样式计算
-      let PromptStyle = "z-index:" + Z + ";background:" + (opts.bgColor || "rgba(0,0,0,.6)") + ";color:" + (opts.color || "#fff") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
+      let PromptStyle = "box-shadow:" + (opts.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (opts.bgColor || "rgba(0,0,0,.6)") + ";color:" + (opts.color || "#fff") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
       let PromptClass = (opts.isRow ? "u-flex-d-r " : "u-flex-d-c ") + (isBlur ? "blurCloud " : "") + (opts.class || "")
       return {
         id: index, // ID
         show: true,
-        type: 0,
+        type: PT,
         pass: isPass ? "u-pe-none" : "u-pe-auto",
         scroll: opts.scroll === undefined ? true : opts.scroll, // 是否允许滑动
         isShut: opts.isShut === undefined ? false : opts.isShut, // 是否点击蒙版关闭
@@ -104,43 +110,49 @@ export default {
         cb: opts.cb,
       }
     },
-    showMsg(txt, opts, index) {
-      let config = this.Engine(txt, opts, index)
+    showMsg(txt, opts, index, PT) {
+      let config = this.Engine(txt, opts, index, PT)
       this.MSG = config
     },
-    showStatus(status, txt, opts, index) {
-      let config = this.Engine(txt, opts, index)
+    showStatus(status, txt, opts, index, PT) {
+      let config = this.Engine(txt, opts, index, PT)
       config.IconStyle = "width:" + (opts.iconWidth || "80rpx") + (opts.iconColor ? ";filter: drop-shadow(100vw 0 " + opts.iconColor + ");right: 100vw" : "") + ";" + (opts.iconStyle || "")
       config.IconUrl = status !== undefined ? (typeof status === "number" ? this.icon[status] : status) : null
       config.IconClass = "u-mg-8rp" + (opts.iconClass || "")
       this.STAT = config
     },
-    showLoad(txt, opts, index) {
-      let config = this.Engine(txt, opts, index)
+    showLoad(txt, opts, index, PT) {
+      let config = this.Engine(txt, opts, index, PT)
       config.LoadClass = "u-mg-24rp" + (opts.loadClass || "")
       config.loadColor = opts.loadColor || "#fff"
       config.LoadSize = opts.loadSize || "80rpx"
       this.LOAD = config
     },
-    showModal(txt, opts, index) {
+    showModal(view, opts, index) {
       // modal 弹窗不会使用公用引擎 所有的配置项与默认值均是独立存在的
       let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
       let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
       let isBlur = opts.isBlur === undefined ? true : opts.isBlur // 是否打开底层高斯
       let Z = parseInt(1000 + Number(index))
-      let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : "") // 蒙版样式计算
-      let PromptStyle = "z-index:" + Z + ";background:" + (opts.bgColor || "rgba(0,0,0,.6)") + ";color:" + (opts.color || "#fff") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
-      let PromptClass = (opts.isRow ? "u-flex-d-r " : "u-flex-d-c ") + (isBlur ? "blurCloud " : "") + (opts.class || "")
+      let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(255,255,255,.86)") : "") // 蒙版样式计算
+      let PromptStyle = "box-shadow:" + (opts.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (opts.bgColor || "rgba(255,255,255,.86)") + ";color:" + (opts.color || "#333") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
+      let PromptClass = (isBlur ? "blurCloud " : "") + (opts.class || "")
       this.MODAL = {
         id: index, // ID
         show: true,
-        type: 0,
+        type: 4,
         pass: isPass ? "u-pe-none" : "u-pe-auto",
         scroll: opts.scroll === undefined ? true : opts.scroll, // 是否允许滑动
         isShut: opts.isShut === undefined ? false : opts.isShut, // 是否点击蒙版关闭
         ani_m: opts.ani_m === undefined ? "fade" : opts.ani_m,
         ani_c: opts.ani_c === undefined ? "z-fade" : opts.ani_c,
-        txt: txt || "", // 弹窗文字
+        // 内容
+        VTitle: view.title || "",
+        VTxt: view.text || "", // 弹窗文字
+        // 按钮
+        VBtn: view.btn || ["确定"],
+        // 按钮操作
+        btnFn: opts.fn || [],
         PromptClass,
         MaskStyle,
         PromptStyle,
@@ -221,8 +233,22 @@ view {
   left: 0;
   z-index: -1;
   overflow: hidden;
-  backdrop-filter: blur(16rpx);
+  backdrop-filter: blur(24rpx);
   border-radius: 8rpx;
+  margin: 1rpx;
+}
+
+.btnLine {
+  border-left: 1rpx #ccc solid;
+  transition: all 0.3s;
+}
+
+.btnLine:active {
+  background: #ccc;
+}
+
+.btnLine:nth-child(1) {
+  border-left: none;
 }
 
 .colors {

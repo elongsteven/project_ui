@@ -45,6 +45,7 @@
  *    @property { String }  bgColor   @default 'rgba(0,0,0,.6)' 弹窗底色
  *    @property { String }  color     @default '#fff'           弹窗文字颜色
  *    @property { String }  fontSize  @default '30rpx'          弹窗文字大小
+ *    @property { String }  shadow    @default '0 0 8rpx 5rpx rgba(0,0,0,0.2)'   弹窗阴影
  *    @property { String }  class     @default '30rpx'          弹窗附加类名
  *    @property { String }  style     @default '30rpx'          弹窗附加样式
  *    @property { String }  ani_m     @default 'fade'           蒙版动画样式名称
@@ -81,8 +82,8 @@ prompt.msg = function (txt, opts) {
   const PT = 0
   let setting = craft.settingEngine(txt, opts, PT)
   Vue.nextTick(() => {
-    if (typeof opts === "object") instance.showMsg(setting.text, opts, ins)
-    else instance.showMsg(setting.text, {}, ins)
+    if (typeof opts === "object") instance.showMsg(setting.text, opts, ins, PT)
+    else instance.showMsg(setting.text, {}, ins, PT)
     craft.autoEngine(setting.time)
   })
 }
@@ -112,8 +113,8 @@ prompt.status = function (txt, opts, status) {
   const PT = 1
   let setting = craft.settingEngine(txt, opts, PT)
   Vue.nextTick(() => {
-    if (typeof opts === "object") instance.showStatus(status, setting.text, opts, ins)
-    else instance.showStatus(status, setting.text, {}, ins)
+    if (typeof opts === "object") instance.showStatus(status, setting.text, opts, ins, PT)
+    else instance.showStatus(status, setting.text, {}, ins, PT)
     craft.autoEngine(setting.time)
   })
   return ins
@@ -124,20 +125,20 @@ prompt.load = function (txt, opts) {
   const PT = 2
   let setting = craft.settingEngine(txt, opts, PT)
   Vue.nextTick(() => {
-    if (typeof opts === "object") instance.showLoad(setting.text, opts, ins)
-    else instance.showLoad(setting.text, {}, ins)
+    if (typeof opts === "object") instance.showLoad(setting.text, opts, ins, PT)
+    else instance.showLoad(setting.text, {}, ins, PT)
     craft.autoEngine(setting.time)
   })
   return ins
 }
 
 // modal 弹窗
-prompt.modal = function (txt, opts) {
+prompt.modal = function (view, opts) {
   const PT = 3
-  let setting = craft.settingEngine(txt, opts, PT)
+  craft.settingEngine(undefined, undefined, PT)
   Vue.nextTick(() => {
-    if (typeof opts === "object") instance.showModal(setting.text, opts, ins)
-    else instance.showModal(setting.text, {}, ins)
+    if (typeof opts === "object") instance.showModal(view, opts, ins, PT)
+    else instance.showModal(view, {}, ins, PT)
     craft.autoEngine(0)
   })
   return ins
