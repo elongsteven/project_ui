@@ -9,27 +9,27 @@
  * @Func    this.$prompt.success(txt, opts);          状态弹窗：成功信息 同this.$prompt.status(text, opts, 1);
  * @Func    this.$prompt.info(txt, opts);             状态弹窗：提示信息 同this.$prompt.status(text, opts, 2);
  * @Func    this.$prompt.question(txt, opts);         状态弹窗：问题信息 同this.$prompt.status(text, opts, 3);
- * @param   { String }            text      *必填* 弹窗文字内容
- * @param   { Object || Number }  opts      *必填* 显示时长(单位:ms) 或 弹窗配置,属性详见 @opts
- * @param   { Number || String }  status    *可选* 状态弹窗的状态定义 0:错误 1:成功 2:提示 3:问题 也可以传图片路径，如果不写该参数 则表现同于msg弹窗
- * @returns { Number }            insId     每创建一个弹窗，都会返回当前这个弹窗实例的ID，可用于关闭等操作
+ * @param   { String }            text                *必填* 弹窗文字内容
+ * @param   { Object || Number }  opts                *必填* 显示时长(单位:ms) 或 弹窗配置,属性详见 @opts
+ * @param   { Number || String }  status              *可选* 状态弹窗的状态定义 0:错误 1:成功 2:提示 3:问题 也可以传图片路径，如果不写该参数 则表现同于msg弹窗
+ * @returns { Number }            insId               每创建一个弹窗，都会返回当前这个弹窗实例的ID，可用于关闭等操作
  *
- * @Func this.$prompt.hide(insId);    关闭指定的弹窗
- * @param { Number } insId            *可选* 要关闭的弹窗实例ID，若不填写 则默认关闭最后一个弹出的弹窗
+ * @Func this.$prompt.hide(insId);                    关闭指定的弹窗
+ * @param { Number } insId                            *可选* 要关闭的弹窗实例ID，若不填写 则默认关闭最后一个弹出的弹窗
  *
- * @Func this.$prompt.hideType(type); 关闭指定类型的弹窗
- * @param { Number } type             *必填* 要关闭的弹窗类型，0:msg 1:status 2:load 3:modal
+ * @Func this.$prompt.hideType(type);                 关闭指定类型的弹窗
+ * @param { Number } type                             *必填* 要关闭的弹窗类型，0:msg 1:status 2:load 3:modal
  *
- * @Func this.$prompt.hideAll();      关闭所有弹窗
+ * @Func this.$prompt.hideAll();                      关闭所有弹窗
  *
- * @Func this.$prompt.getList();      获取当前正在运行的弹窗列表
+ * @Func this.$prompt.getList();                      获取当前正在运行的弹窗列表
  *
  * -///== 私域函数 ==///-
- * @Func craft.settingEngine(txt, opts, type);  文字与时间处理器
- * @return { Object }   { text: 内容文字, time: 显示时长 }
- * @Func craft.autoEngine(time);                自动关闭引擎
- * @Func craft.ArrDebug(arr);                   Debugger 数组调试用工具
- *
+ * @Func craft.settingEngine(txt, opts, type);        文字与时间处理器
+ * @return { Object }                                 { text: 内容文字, time: 显示时长 }
+ * @Func craft.autoEngine(time);                      自动关闭引擎
+ * @Func craft.ArrDebug(arr);                         Debugger 数组调试用工具
+ * 
  *   -   -   -   -   -   -   -   -   -
  * 写在前面：所有的配置项均有默认值，因此 所有的配置项皆为选填项
  * @opts {
