@@ -45,7 +45,7 @@ export default {
     }
   },
   onLoad() {
-    this.$prompt.modal({ title: "加载中...", text: "请稍后" }, {})
+    this.$prompt.modal({ title: "加载中...", text: "请稍后" }, { isPass: true })
   },
   methods: {
     t1() {

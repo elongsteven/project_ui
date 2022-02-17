@@ -39,6 +39,8 @@
  *    @property { Boolean } isMask    @default false            是否打开蒙板
  *    @property { Boolean } scroll    @default true             是否允许滑动
  *    @property { Boolean } isShut    @default false            是否蒙版点隐
+ *    @property { Boolean } isBlur    @default false            是否开启高斯
+ *    @property { Boolean } isRow     @default false            是否使附加元素和文字同行显示
  *    @property { String }  maskColor @default 'rgba(0,0,0,.6)' 蒙版底色
  *    @property { String }  bgColor   @default 'rgba(0,0,0,.6)' 弹窗底色
  *    @property { String }  color     @default '#fff'           弹窗文字颜色
@@ -49,7 +51,6 @@
  *    @property { String }  ani_c     @default 'z-fade'         弹窗动画样式名称
  *    @property { Function }  cb      @default undefined        弹窗关闭时会触发的回调函数
  *  // status 弹窗配置
- *    @property { Boolean } isRow     @default false            是否使图标和文字同行显示
  *    @property { String } iconWidth  @default '80rpx'          图标宽度
  *    @property { String } iconColor  @default ''               图标颜色(仅支持纯色)
  *    @property { String } iconClass  @default ''               图标附加类名
@@ -62,7 +63,7 @@
  * }
  *   -   -   -   -   -   -   -   -   -
  * @modal {
- * 
+ *
  * }
  */
 

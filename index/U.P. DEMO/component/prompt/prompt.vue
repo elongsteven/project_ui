@@ -82,9 +82,11 @@ export default {
       // 默认配置引擎  default: 不穿透 无蒙版 可滑动 无点击蒙版关闭
       let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
       let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
+      let isBlur = opts.isBlur === undefined ? true : opts.isBlur // 是否打开底层高斯
       let Z = parseInt(1000 + Number(index))
       let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : "") // 蒙版样式计算
       let PromptStyle = "z-index:" + Z + ";background:" + (opts.bgColor || "rgba(0,0,0,.6)") + ";color:" + (opts.color || "#fff") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
+      let PromptClass = (opts.isRow ? "u-flex-d-r " : "u-flex-d-c ") + (isBlur ? "blurCloud " : "") + (opts.class || "")
       return {
         id: index, // ID
         show: true,
@@ -95,7 +97,7 @@ export default {
         ani_m: opts.ani_m === undefined ? "fade" : opts.ani_m,
         ani_c: opts.ani_c === undefined ? "z-fade" : opts.ani_c,
         txt: txt || "", // 弹窗文字
-        PromptClass: opts.class || "",
+        PromptClass,
         MaskStyle,
         PromptStyle,
         Z,
@@ -108,7 +110,6 @@ export default {
     },
     showStatus(status, txt, opts, index) {
       let config = this.Engine(txt, opts, index)
-      config.PromptClass = (opts.isRow ? "u-flex-d-r" : "u-flex-d-c") + " " + (opts.class || "")
       config.IconStyle = "width:" + (opts.iconWidth || "80rpx") + (opts.iconColor ? ";filter: drop-shadow(100vw 0 " + opts.iconColor + ");right: 100vw" : "") + ";" + (opts.iconStyle || "")
       config.IconUrl = status !== undefined ? (typeof status === "number" ? this.icon[status] : status) : null
       config.IconClass = "u-mg-8rp" + (opts.iconClass || "")
@@ -116,7 +117,6 @@ export default {
     },
     showLoad(txt, opts, index) {
       let config = this.Engine(txt, opts, index)
-      config.PromptClass = (opts.isRow ? "u-flex-d-r" : "u-flex-d-c") + " " + (opts.class || "")
       config.LoadClass = "u-mg-24rp" + (opts.loadClass || "")
       config.loadColor = opts.loadColor || "#fff"
       config.LoadSize = opts.loadSize || "80rpx"
@@ -126,9 +126,11 @@ export default {
       // modal 弹窗不会使用公用引擎 所有的配置项与默认值均是独立存在的
       let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
       let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
+      let isBlur = opts.isBlur === undefined ? true : opts.isBlur // 是否打开底层高斯
       let Z = parseInt(1000 + Number(index))
       let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : "") // 蒙版样式计算
       let PromptStyle = "z-index:" + Z + ";background:" + (opts.bgColor || "rgba(0,0,0,.6)") + ";color:" + (opts.color || "#fff") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
+      let PromptClass = (opts.isRow ? "u-flex-d-r " : "u-flex-d-c ") + (isBlur ? "blurCloud " : "") + (opts.class || "")
       this.MODAL = {
         id: index, // ID
         show: true,
@@ -139,7 +141,7 @@ export default {
         ani_m: opts.ani_m === undefined ? "fade" : opts.ani_m,
         ani_c: opts.ani_c === undefined ? "z-fade" : opts.ani_c,
         txt: txt || "", // 弹窗文字
-        PromptClass: opts.class || "",
+        PromptClass,
         MaskStyle,
         PromptStyle,
         Z,
@@ -208,6 +210,19 @@ view {
 
 .prompt0 {
   max-width: 80vw;
+}
+
+.blurCloud:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: -1;
+  overflow: hidden;
+  backdrop-filter: blur(16rpx);
+  border-radius: 8rpx;
 }
 
 .colors {
