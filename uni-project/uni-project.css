@@ -49,6 +49,7 @@ navigator {
 image {
   border: 0;
   display: block;
+  height: auto;
 }
 
 textarea {
@@ -58,6 +59,19 @@ textarea {
 
 [hidden] {
   display: none
+}
+
+.u-btn,
+.u-input {
+  padding: 4rpx 12rpx;
+}
+
+.u-btn {
+  display: block;
+  border: 1rpx solid transparent;
+  text-align: center;
+  border-radius: 6rpx;
+  outline: none;
 }
 
 /* ===元素级别=== */
@@ -13988,19 +14002,6 @@ textarea {
 
 /* ===按钮=== */
 
-.u-btn,
-.u-input {
-  padding: 4rpx 12rpx
-}
-
-.u-btn {
-  display: inline-block;
-  outline: none;
-  border: 1rpx solid transparent;
-  text-align: center;
-  background-color: white
-}
-
 .u-btn-999 {
   color: white;
   background-color: #999;
@@ -14456,4 +14457,12 @@ textarea {
 
 .u-resize-none {
   resize: none
+}
+
+.u-pe-none {
+  pointer-events: none
+}
+
+.u-pe-auto {
+  pointer-events: auto
 }
