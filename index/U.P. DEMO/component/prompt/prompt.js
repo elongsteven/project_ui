@@ -136,6 +136,20 @@ prompt.load = function (txt, opts) {
 prompt.modal = function (view, opts) {
   const PT = 3
   craft.settingEngine(undefined, undefined, PT)
+  // 按钮初始化 - 配置计算
+  if (!opts.btn || opts.btn.length === 0) opts.btn = [{ key: "确定" }]
+  opts.btn.forEach((item, index) => {
+    if (!item.key) item.key = "未定义"
+    if (!item.fn) item.fn = undefined
+    if (!item.time) item.time = 0
+    if (!item.style) {
+      if (opts.btn.length < 2) item.style = { color: "#4E90F6" }
+      else if (opts.btn.length === 2) {
+        if (index === 0) item.style = { color: "#ED0009" }
+        else item.style = { color: "#4E90F6" }
+      } else item.style = {}
+    }
+  })
   Vue.nextTick(() => {
     if (typeof opts === "object") instance.showModal(view, opts, ins, PT)
     else instance.showModal(view, {}, ins, PT)

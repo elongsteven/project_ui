@@ -60,10 +60,16 @@
         <view @click.stop class="u-w-70 u-ps-f u-ps-center u-t-break u-radius-8rp u-pd-t-24rp u-pe-auto" :class="MODAL.PromptClass" :style="MODAL.PromptStyle">
           <view class="u-flex u-flex-jc-c u-flex-ai-c u-pd-lr-18rp u-pd-b-21rp u-flex-d-c">
             <view class="u-w-fit u-f-b u-f-34rp u-mg-b-10rp">{{ MODAL.VTitle }}</view>
-            <view class="u-w-fit">{{ MODAL.VTxt }}</view>
+            <view class="u-w-fit">
+              {{ MODAL.VDesc }}
+              <block v-if="MODAL.setTime > 0">&nbsp;({{ MODAL.setTime }})</block>
+            </view>
           </view>
           <view class="u-w-100 u-flex u-flex-jc-sb u-flex-ai-c u-f-b u-bd-t-grey">
-            <view v-for="(item, index) in MODAL.VBtn" class="u-flex-1 u-t-c u-pd-tb-21rp btnLine" :key="index">{{ item }}</view>
+            <view v-for="(item, index) in MODAL.btnList" @click="modalEvent(item.fn)" :class="item.time > 0 ? 'btnNone' : ''" class="u-flex-1 u-t-c u-pd-tb-21rp btnLine" :style="{ color: item.style.color }" :key="index">
+              {{ item.key }}
+              <block v-if="item.time > 0">&nbsp;({{ item.time }})</block>
+            </view>
           </view>
         </view>
       </view>
@@ -146,19 +152,50 @@ export default {
         isShut: opts.isShut === undefined ? false : opts.isShut, // 是否点击蒙版关闭
         ani_m: opts.ani_m === undefined ? "fade" : opts.ani_m,
         ani_c: opts.ani_c === undefined ? "z-fade" : opts.ani_c,
-        // 内容
-        VTitle: view.title || "",
-        VTxt: view.text || "", // 弹窗文字
-        // 按钮
-        VBtn: view.btn || ["确定"],
-        // 按钮操作
-        btnFn: opts.fn || [],
         PromptClass,
         MaskStyle,
         PromptStyle,
         Z,
         cb: opts.cb,
+        // 内容
+        VTitle: view.title || "",
+        VDesc: view.desc || "", // 弹窗文字
+        btnList: opts.btn,
+        setTime: opts.setTime || 0,
+        setFn: opts.setFn || undefined,
+        setHide: opts.setHide === undefined ? true : opts.setHide, // 倒计时结束是否自动关闭
       }
+      this.MODAL.btnList.forEach((item, index) => {
+        if (item.time > 0) this.timer(index, this.MODAL.id)
+      })
+      if (this.MODAL.setTime > 0) this.autoEvent(this.MODAL.id)
+    },
+    timer(i, id) {
+      setTimeout(() => {
+        if (!this.MODAL.show || this.MODAL.id !== id) return false // ID验证，防串线
+        this.MODAL.btnList[i].time--
+        if (this.MODAL.btnList[i].time > 0) this.timer(i, id)
+      }, 1000)
+    },
+    autoEvent(id) {
+      setTimeout(() => {
+        if (!this.MODAL.show || this.MODAL.id !== id) return false // ID验证，防串线
+        this.MODAL.setTime--
+        if (this.MODAL.setTime > 0) this.autoEvent(id)
+        else {
+          if (this.MODAL.setFn && this.MODAL.show) this.MODAL.setFn()
+          this.MODAL = { show: false }
+        }
+      }, 1000)
+    },
+    modalEvent(fn) {
+      /* 支持延时关闭 */
+      // let pid = this.MODAL.id
+      // if (fn) fn(() => {this.$prompt.hide(pid)})
+      // else this.$prompt.hide(pid)
+      /* 直接关闭 */
+      if (fn && this.MODAL.show) fn()
+      this.MODAL = { show: false }
     },
     hide(obj) {
       switch (obj.type) {
@@ -240,7 +277,8 @@ view {
 
 .btnLine {
   border-left: 1rpx #ccc solid;
-  transition: all 0.3s;
+  transition: all 0.3s ease-out;
+  user-select: none;
 }
 
 .btnLine:active {
@@ -249,6 +287,11 @@ view {
 
 .btnLine:nth-child(1) {
   border-left: none;
+}
+
+.btnNone {
+  pointer-events: none;
+  filter: opacity(0.6);
 }
 
 .colors {
