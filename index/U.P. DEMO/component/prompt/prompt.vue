@@ -4,7 +4,7 @@
     <transition :name="MSG.ani_m">
       <view v-if="MSG.show">
         <view v-if="!MSG.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: MSG.Z - 10 }" @touchmove.stop.prevent="() => {}"></view>
-        <view @click="maskTap(MSG.isShut, MSG.type)" class="u-ps-f u-ps-full" :class="MSG.pass" :style="MSG.MaskStyle"></view>
+        <view @click="maskTap(MSG)" class="u-ps-f u-ps-full" :class="MSG.pass" :style="MSG.MaskStyle"></view>
       </view>
     </transition>
     <transition :name="MSG.ani_c">
@@ -18,7 +18,7 @@
     <transition :name="STAT.ani_m">
       <view v-if="STAT.show">
         <view v-if="!STAT.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: STAT.Z - 10 }" @touchmove.stop.prevent="() => {}"></view>
-        <view @click="maskTap(STAT.isShut, STAT.type)" class="u-ps-f u-ps-full" :class="STAT.pass" :style="STAT.MaskStyle"></view>
+        <view @click="maskTap(STAT)" class="u-ps-f u-ps-full" :class="STAT.pass" :style="STAT.MaskStyle"></view>
       </view>
     </transition>
     <transition :name="STAT.ani_c">
@@ -34,7 +34,7 @@
     <transition :name="LOAD.ani_m">
       <view v-if="LOAD.show">
         <view v-if="!LOAD.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: LOAD.Z - 10 }" @touchmove.stop.prevent="() => {}"></view>
-        <view @click="maskTap(LOAD.isShut, LOAD.type)" class="u-ps-f u-ps-full" :class="LOAD.pass" :style="LOAD.MaskStyle"></view>
+        <view @click="maskTap(LOAD)" class="u-ps-f u-ps-full" :class="LOAD.pass" :style="LOAD.MaskStyle"></view>
       </view>
     </transition>
     <transition :name="LOAD.ani_c">
@@ -52,23 +52,23 @@
     <transition :name="MODAL.ani_m">
       <view v-if="MODAL.show">
         <view v-if="!MODAL.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: MODAL.Z - 10 }" @touchmove.stop.prevent="() => {}"></view>
-        <view @click="maskTap(MODAL.isShut, MODAL.type)" class="u-ps-f u-ps-full" :class="MODAL.pass" :style="MODAL.MaskStyle"></view>
+        <view @click="maskTap(MODAL)" class="u-ps-f u-ps-full" :class="MODAL.pass" :style="MODAL.MaskStyle"></view>
       </view>
     </transition>
     <transition :name="MODAL.ani_c">
       <view v-if="MODAL.show" class="u-ps-f u-ps-full u-pe-none" :style="{ zIndex: MODAL.Z }">
         <view @click.stop class="u-w-70 u-ps-f u-ps-center u-t-break u-radius-8rp u-pd-t-24rp u-pe-auto" :class="MODAL.PromptClass" :style="MODAL.PromptStyle">
           <view class="u-flex u-flex-jc-c u-flex-ai-c u-pd-lr-18rp u-pd-b-21rp u-flex-d-c">
-            <view class="u-w-fit u-f-b u-f-34rp u-mg-b-10rp">{{ MODAL.VTitle }}</view>
-            <view class="u-w-fit">
+            <view class="u-w-fit u-mg-b-10rp" :style="MODAL.vtStyle">{{ MODAL.VTitle }}</view>
+            <view class="u-w-fit" :style="MODAL.vdStyle">
               {{ MODAL.VDesc }}
-              <block v-if="MODAL.setTime > 0">&nbsp;({{ MODAL.setTime }})</block>
+              <span v-if="MODAL.setTime > 0" :style="MODAL.timeStyle">&nbsp;({{ MODAL.setTime }})</span>
             </view>
           </view>
-          <view class="u-w-100 u-flex u-flex-jc-sb u-flex-ai-c u-f-b u-bd-t-grey">
-            <view v-for="(item, index) in MODAL.btnList" @click="modalEvent(item.fn)" :class="item.time > 0 ? 'btnNone' : ''" class="u-flex-1 u-t-c u-pd-tb-21rp btnLine" :style="{ color: item.style.color }" :key="index">
+          <view class="u-w-100 u-flex u-flex-jc-sb u-flex-ai-c" :style="'border-top:1rpx solid ' + MODAL.lineColor">
+            <view v-for="(item, index) in MODAL.btnList" @click="modalEvent(item.fn)" :class="item.time > 0 ? 'btnNone' : ''" class="u-flex-1 u-t-c u-pd-tb-21rp btnLine" :style="item.style" :key="index">
               {{ item.key }}
-              <block v-if="item.time > 0">&nbsp;({{ item.time }})</block>
+              <span v-if="item.time > 0" :style="MODAL.timeStyle">&nbsp;({{ item.time }})</span>
             </view>
           </view>
         </view>
@@ -122,6 +122,7 @@ export default {
     },
     showStatus(status, txt, opts, index, PT) {
       let config = this.Engine(txt, opts, index, PT)
+      // status 图标附加属性
       config.IconStyle = "width:" + (opts.iconWidth || "80rpx") + (opts.iconColor ? ";filter: drop-shadow(100vw 0 " + opts.iconColor + ");right: 100vw" : "") + ";" + (opts.iconStyle || "")
       config.IconUrl = status !== undefined ? (typeof status === "number" ? this.icon[status] : status) : null
       config.IconClass = "u-mg-8rp" + (opts.iconClass || "")
@@ -129,75 +130,41 @@ export default {
     },
     showLoad(txt, opts, index, PT) {
       let config = this.Engine(txt, opts, index, PT)
+      // loading 加载层附加属性
       config.LoadClass = "u-mg-24rp" + (opts.loadClass || "")
       config.loadColor = opts.loadColor || "#fff"
       config.LoadSize = opts.loadSize || "80rpx"
       this.LOAD = config
     },
-    showModal(view, opts, index) {
-      // modal 弹窗不会使用公用引擎 所有的配置项与默认值均是独立存在的
+    showModal(view, opts, index, PT) {
+      let config = this.Engine(opts, index, PT)
+      // modal弹窗 部分配置是独立存在的 与公用的引默认值擎不同
       let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
       let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
       let isBlur = opts.isBlur === undefined ? true : opts.isBlur // 是否打开底层高斯
       let Z = parseInt(1000 + Number(index))
-      let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(255,255,255,.86)") : "") // 蒙版样式计算
-      let PromptStyle = "box-shadow:" + (opts.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (opts.bgColor || "rgba(255,255,255,.86)") + ";color:" + (opts.color || "#333") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
-      let PromptClass = (isBlur ? "blurCloud " : "") + (opts.class || "")
-      this.MODAL = {
-        id: index, // ID
-        show: true,
-        type: 4,
-        pass: isPass ? "u-pe-none" : "u-pe-auto",
-        scroll: opts.scroll === undefined ? true : opts.scroll, // 是否允许滑动
-        isShut: opts.isShut === undefined ? false : opts.isShut, // 是否点击蒙版关闭
-        ani_m: opts.ani_m === undefined ? "fade" : opts.ani_m,
-        ani_c: opts.ani_c === undefined ? "z-fade" : opts.ani_c,
-        PromptClass,
-        MaskStyle,
-        PromptStyle,
-        Z,
-        cb: opts.cb,
-        // 内容
-        VTitle: view.title || "",
-        VDesc: view.desc || "", // 弹窗文字
-        btnList: opts.btn,
-        setTime: opts.setTime || 0,
-        setFn: opts.setFn || undefined,
-        setHide: opts.setHide === undefined ? true : opts.setHide, // 倒计时结束是否自动关闭
-      }
+      config.MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(255,255,255,.86)") : "") // 蒙版样式计算
+      config.PromptStyle = "box-shadow:" + (opts.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (opts.bgColor || "rgba(255,255,255,.86)") + ";color:" + (opts.color || "#333") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
+      config.PromptClass = (isBlur ? "blurCloud " : "") + (opts.class || "")
+      // modal弹窗 拓展属性
+      config.VTitle = view.title || ""
+      config.vtStyle = opts.vtStyle
+      config.VDesc = view.desc || "" // 弹窗文字
+      config.vdStyle = opts.vdStyle
+      config.btnList = opts.btn
+      config.setTime = opts.setTime || 0
+      config.setFn = opts.setFn || undefined
+      config.setHide = opts.setHide === undefined ? true : opts.setHide // 倒计时结束是否自动关闭
+      config.lineColor = opts.lineColor
+      this.MODAL = config
+      // modal弹窗 拓展功能
       this.MODAL.btnList.forEach((item, index) => {
         if (item.time > 0) this.timer(index, this.MODAL.id)
       })
       if (this.MODAL.setTime > 0) this.autoEvent(this.MODAL.id)
     },
-    timer(i, id) {
-      setTimeout(() => {
-        if (!this.MODAL.show || this.MODAL.id !== id) return false // ID验证，防串线
-        this.MODAL.btnList[i].time--
-        if (this.MODAL.btnList[i].time > 0) this.timer(i, id)
-      }, 1000)
-    },
-    autoEvent(id) {
-      setTimeout(() => {
-        if (!this.MODAL.show || this.MODAL.id !== id) return false // ID验证，防串线
-        this.MODAL.setTime--
-        if (this.MODAL.setTime > 0) this.autoEvent(id)
-        else {
-          if (this.MODAL.setFn && this.MODAL.show) this.MODAL.setFn()
-          this.MODAL = { show: false }
-        }
-      }, 1000)
-    },
-    modalEvent(fn) {
-      /* 支持延时关闭 */
-      // let pid = this.MODAL.id
-      // if (fn) fn(() => {this.$prompt.hide(pid)})
-      // else this.$prompt.hide(pid)
-      /* 直接关闭 */
-      if (fn && this.MODAL.show) fn()
-      this.MODAL = { show: false }
-    },
     hide(obj) {
+      // 隐藏指定弹框
       switch (obj.type) {
         case 0:
           if (this.MSG.cb) this.MSG.cb()
@@ -218,12 +185,40 @@ export default {
       }
     },
     hideAll() {
+      // 隐藏所有弹框
       this.MSG.show = this.STAT.show = this.LOAD.show = this.MODAL.show = false
     },
-    maskTap(a, type) {
-      console.log(a, type)
-      if (!a) return false
-      this.hide({ type })
+    maskTap(n) {
+      // 蒙版功能 点击隐藏
+      if (n.isShut && n.show) this.hide({ type: n.type })
+    },
+    /* Modal 功能拓展坞 */
+    modalEvent(fn) {
+      /* 支持延时关闭 */
+      // let pid = this.MODAL.id
+      // if (fn) fn(() => {this.$prompt.hide(pid)})
+      // else this.$prompt.hide(pid)
+      /* 直接关闭 */
+      if (fn && this.MODAL.show) fn()
+      this.MODAL = { show: false }
+    },
+    timer(i, id) {
+      setTimeout(() => {
+        if (!this.MODAL.show || this.MODAL.id !== id) return false // ID验证，防串线
+        this.MODAL.btnList[i].time--
+        if (this.MODAL.btnList[i].time > 0) this.timer(i, id)
+      }, 1000)
+    },
+    autoEvent(id) {
+      setTimeout(() => {
+        if (!this.MODAL.show || this.MODAL.id !== id) return false // ID验证，防串线
+        this.MODAL.setTime--
+        if (this.MODAL.setTime > 0) this.autoEvent(id)
+        else {
+          if (this.MODAL.setFn && this.MODAL.show) this.MODAL.setFn()
+          this.MODAL = { show: false }
+        }
+      }, 1000)
     },
   },
 }
@@ -251,7 +246,8 @@ export default {
   transition: all 0.3s ease;
 }
 
-view {
+view,
+span {
   color: inherit;
   font-size: inherit;
   z-index: inherit;
@@ -276,7 +272,6 @@ view {
 }
 
 .btnLine {
-  border-left: 1rpx #ccc solid;
   transition: all 0.3s ease-out;
   user-select: none;
 }
@@ -286,7 +281,7 @@ view {
 }
 
 .btnLine:nth-child(1) {
-  border-left: none;
+  border-left: none !important;
 }
 
 .btnNone {

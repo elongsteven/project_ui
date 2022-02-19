@@ -1,5 +1,5 @@
 /** PROMPT | C: 2022-02-08 | by: Elong
- * last update: 2022-02-17 | Ver 1.2.0
+ * last update: 2022-02-19 | Ver 1.6.0
  *
  * -///== 对公函数 ==///-
  * @Func    this.$prompt.msg(text, opts);             创建一个信息弹窗
@@ -136,6 +136,12 @@ prompt.load = function (txt, opts) {
 prompt.modal = function (view, opts) {
   const PT = 3
   craft.settingEngine(undefined, undefined, PT)
+  if (!opts.lineColor) opts.lineColor = "#ccc"
+  // 初始化文字样式
+  if (!opts.vtStyle) opts.vtStyle = {}
+  if (!opts.vdStyle) opts.vdStyle = {}
+  if (!opts.vtStyle.fontSize) opts.vtStyle.fontSize = "34rpx"
+  if (!opts.vtStyle.fontWeight) opts.vtStyle.fontWeight = "bold"
   // 按钮初始化 - 配置计算
   if (!opts.btn || opts.btn.length === 0) opts.btn = [{ key: "确定" }]
   opts.btn.forEach((item, index) => {
@@ -149,6 +155,8 @@ prompt.modal = function (view, opts) {
         else item.style = { color: "#4E90F6" }
       } else item.style = {}
     }
+    if (!item.style.fontWeight) item.style.fontWeight = "bold"
+    if (!item.style.borderLeft) item.style.borderLeft = "1rpx solid" + opts.lineColor
   })
   Vue.nextTick(() => {
     if (typeof opts === "object") instance.showModal(view, opts, ins, PT)

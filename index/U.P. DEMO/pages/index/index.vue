@@ -55,6 +55,7 @@ export default {
           isPass: true,
           setTime: 10,
           setFn: this.fn3,
+          lineColor: '#000',
           btn: [
             { key: "Delete", style: { color: "#999" }, fn: this.fn1 },
             { key: "Cancel", fn: this.fn1, time: 30 },
