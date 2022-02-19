@@ -18,12 +18,17 @@ swiper,
 swiper-item,
 image,
 navigator,
+span,
 button {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   font-size: 28rpx;
   color: #333333;
+}
+
+span {
+  display: inline-block
 }
 
 scroll-view ::-webkit-scrollbar {
