@@ -1,6 +1,6 @@
 import App from "./App"
 // import {  } from './util/components.js'
-import prompt from "./component/prompt/prompt"
+import prompt from "./component/prompt/prompt.js"
 
 // #ifndef VUE3
 import Vue from "vue"

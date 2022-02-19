@@ -30,6 +30,7 @@
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.msg($prompt.getList())">获取当前弹窗ID列表</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="t3">测试 3</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="ttt">关闭 2</view>
+    <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="goto">byebye</view>
     <view class="u-h-100vh"></view>
     <view class="u-h-100vh"></view>
 
@@ -55,13 +56,16 @@ export default {
           isPass: true,
           setTime: 10,
           setFn: this.fn3,
-          lineColor: '#000',
+          lineColor: "#000",
           btn: [
             { key: "Delete", style: { color: "#999" }, fn: this.fn1 },
             { key: "Cancel", fn: this.fn1, time: 30 },
           ],
         }
       )
+    },
+    goto() {
+      uni.navigateTo({ url: "/pages/index/demo" })
     },
     t1() {
       console.log(this.$prompt.msg("111", { isPass: true, time: 10000 }))
@@ -73,6 +77,7 @@ export default {
       this.$prompt.msg("333", { isPass: true, time: 10000 })
     },
     ttt() {
+      console.log(this.popTest)
       this.$prompt.hide(this.popTest)
     },
     test(a) {

@@ -9,6 +9,11 @@ export default {
   onHide: function () {
     console.log("App Hide")
   },
+  watch: {
+    $route: function (from, to) {
+      this.$prompt.routeChange(from, to)
+    },
+  },
 }
 </script>
 
