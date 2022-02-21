@@ -4,7 +4,7 @@ let routeChange = function () {
 
 /** PROMPT | C: 2022-02-08 | by: Elong
  * last update: 2022-02-19 | Ver 1.6.0 */
-import promptView from "@/component/PCI/public/prompt.vue"
+import promptView from "@/component/PCI/public/prompt.vue" // 即将舍弃
 
 /**
  * 需求整理   --来自开发者
@@ -15,6 +15,16 @@ import promptView from "@/component/PCI/public/prompt.vue"
  *    a. 原 View 中的 Engine，搬到 js 中
  *    b. 计时关闭保留在 js 中
  *    c. 考虑倒计时逻辑功能怎么移植到 js 中
+ */
+
+/**
+ * TODO:
+ * 1. 写DEMO，页面通过总线事件传参 prompt监听注入 测试。
+ * 2. 整理总线函数，写计算函数，事件传参
+ * 3. prompt组件监听唯一事件，通过参数标识判断需要执行的弹窗类型，弹窗在用户视图显示
+ * 4. PCIe总线计时器，调用关闭弹窗，事件传参
+ * 5. prompt监听关闭类函数，通过参数判断关闭方式，执行回调函数，弹窗"明周期"结束
+ * 6. 每个弹窗都要有 "唯一ID" 以及 "TYPE标识" 保证 "线程分离"，避免"暗周期"的出现
  */
 
 /**
