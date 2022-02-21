@@ -1,6 +1,6 @@
 import App from "./App"
-import PCIe from "@/component/PCIe/PCIe.vue"
-import { prompt } from "@/component/PCIe/PCIe.js"
+import PCIe from "@/component/PCI/PCIe.vue"
+import { prompt } from "@/component/PCI/PCIe.js"
 
 // #ifndef VUE3
 import Vue from "vue"

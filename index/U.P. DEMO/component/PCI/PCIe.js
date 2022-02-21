@@ -4,14 +4,25 @@ let routeChange = function () {
 
 /** PROMPT | C: 2022-02-08 | by: Elong
  * last update: 2022-02-19 | Ver 1.6.0 */
-import promptView from "@/component/prompt/prompt.vue"
+import promptView from "@/component/PCI/public/prompt.vue"
 
 /**
  * 需求整理   --来自开发者
  * 目标版本：1.16
  *  1. 使用 uni.$emit uni.$on 实现底层通信交互逻辑
- *  2. 弹窗组件仅有一个入口函数，在函数后面做判断来执行相应的弹窗显示
- *  3. 所有的计算均在js中执行
+ *  2. 弹窗组件仅有一个入口函数，在函数的末尾做判断来执行相应的弹窗，不同的调用均仅在js中做分线
+ *  3. 所有的计算均在js中执行，尽量让view中的逻辑精简以提升性能（曲线救国(?)）
+ *    a. 原 View 中的 Engine，搬到 js 中
+ *    b. 计时关闭保留在 js 中
+ *    c. 考虑倒计时逻辑功能怎么移植到 js 中
+ */
+
+/**
+ * uni事件监听功能整理
+ * uni.$emit(eventName, Obj) // 触发全局自定义事件，传参类型为对象
+ * uni.$on(eventName, callback(Obj)) // 监听全局自定义事件，回调函数中的参数就是触发时传过来的参数
+ * uni.$once(eventName, callback(Obj)) // 监听全局的自定义事件，事件由 uni.$emit 触发，但仅触发一次，在第一次触发之后移除该监听器。（其实没太懂 "事件由 uni.$emit 触发" 这句）
+ * uni.$off([eventName, callback(Obj)]) // 移除全局自定义事件监听器。若uni.$off不传参，则移除App级别的所有事件监听器；
  */
 
 export let prompt = {

@@ -81,7 +81,7 @@
 export default {
   name: "prompt",
   onLoad() {
-    uni.$on("showMsg", this.showMsg())
+    uni.$on("showPrompt", this.Engine(original)) // 弹窗触发总线路
   },
   data() {
     return {
