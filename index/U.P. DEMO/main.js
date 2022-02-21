@@ -1,12 +1,12 @@
 import App from "./App"
-// import {  } from './util/components.js'
-import prompt from "./component/prompt/prompt.js"
+import PCIe from "@/component/PCIe/PCIe.vue"
+import { prompt } from "@/component/PCIe/PCIe.js"
 
 // #ifndef VUE3
 import Vue from "vue"
 Vue.config.productionTip = false
-Vue.prototype.$prompt = prompt // 引入弹窗方法 2.x
-Vue.component("prompt", prompt) // 引入全局组件 2.x
+Vue.component("page", PCIe) // 引入全局组件 2.x
+Vue.prototype.$prompt = prompt // 注册方法
 App.mpType = "app"
 const app = new Vue({
   ...App,
