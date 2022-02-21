@@ -1,5 +1,5 @@
 <template>
-  <view class="">
+  <page class="">
     <button class="u-btn u-bd-e5e">1111</button>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.msg('hello project-ui', { isPass: true })">msg 弹框</view>
     <view
@@ -35,7 +35,7 @@
     <view class="u-h-100vh"></view>
 
     <!-- <view class="u-mask u-ps-f u-ps-full" @touchmove.stop.prevent="function(){}"></view> -->
-  </view>
+  </page>
 </template>
 
 <script>
@@ -45,11 +45,12 @@ export default {
       popTest: "",
     }
   },
-  onLoad() {
-    this.myModal()
+  onReady() {
+    // this.myModal()
   },
   methods: {
     myModal() {
+      console.log(this.$prompt)
       this.$prompt.modal(
         { title: "加载中", desc: "请稍后..." },
         {
