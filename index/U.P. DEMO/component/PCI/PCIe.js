@@ -1,14 +1,13 @@
-let routeChange = function () {
-  prompt.hideAll()
-}
-
 /** PROMPT | C: 2022-02-08 | by: Elong
- * last update: 2022-02-19 | Ver 1.6.0 */
-import promptView from "@/component/PCI/public/prompt.vue" // 即将舍弃
+ * last update: 2022-02-21 | Ver 1.6.2 Alpha */
 
 /**
  * 需求整理   --来自开发者
  * 目标版本：1.16
+ * 现状分析：当前版本的底层是操作浏览器的DOM对象，这种实现方式无法兼容APP，只有Web端可以正常运行
+ * 组件初心：兼容且适配多端的弹出层组件，解决uni-app原生弹窗不美观且无法自由控制的问题
+ * 优化方案：改变底层逻辑，推翻当前实现方式 重构底层。
+ * 思路：
  *  1. 使用 uni.$emit uni.$on 实现底层通信交互逻辑
  *  2. 弹窗组件仅有一个入口函数，在函数的末尾做判断来执行相应的弹窗，不同的调用均仅在js中做分线
  *  3. 所有的计算均在js中执行，尽量让view中的逻辑精简以提升性能（曲线救国(?)）
@@ -34,6 +33,12 @@ import promptView from "@/component/PCI/public/prompt.vue" // 即将舍弃
  * uni.$once(eventName, callback(Obj)) // 监听全局的自定义事件，事件由 uni.$emit 触发，但仅触发一次，在第一次触发之后移除该监听器。（其实没太懂 "事件由 uni.$emit 触发" 这句）
  * uni.$off([eventName, callback(Obj)]) // 移除全局自定义事件监听器。若uni.$off不传参，则移除App级别的所有事件监听器；
  */
+
+import promptView from "@/component/PCI/public/prompt.vue" // 即将舍弃
+
+let routeChange = function () {
+  prompt.hideAll()
+}
 
 export let prompt = {
   ins: 0, // 弹窗ID
