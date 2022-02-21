@@ -80,6 +80,9 @@
 <script>
 export default {
   name: "prompt",
+  onLoad() {
+    uni.$on("showMsg", this.showMsg())
+  },
   data() {
     return {
       MSG: { show: false },
@@ -90,7 +93,6 @@ export default {
     }
   },
   methods: {
-    _$newData(){},
     Engine(txt, opts, index, PT) {
       // 默认配置引擎  default: 不穿透 无蒙版 可滑动 无点击蒙版关闭
       let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
@@ -119,8 +121,8 @@ export default {
     },
     showMsg(txt, opts, index, PT) {
       let config = this.Engine(txt, opts, index, PT)
-      // this.MSG = this.$set(this, "MSG", config)
-      this.$set(this, "MSG", config)
+      this.MSG = config
+      console.log(this.MSG)
     },
     showStatus(status, txt, opts, index, PT) {
       let config = this.Engine(txt, opts, index, PT)
