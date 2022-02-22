@@ -1,5 +1,5 @@
 /** PROMPT | C: 2022-02-08 | by: Elong
- * last update: 2022-02-21 | Ver 1.6.2 Alpha */
+ * last update: 2022-02-22 | Ver 1.7.0 Alpha */
 
 /**
  * 需求整理   --来自开发者
@@ -18,12 +18,12 @@
 
 /**
  * TODO:
- * 1. 写DEMO，页面通过总线事件传参 prompt监听注入 测试。
- * 2. 整理总线函数，写计算函数，事件传参
- * 3. prompt组件监听唯一事件，通过参数标识判断需要执行的弹窗类型，弹窗在用户视图显示
- * 4. PCIe总线计时器，调用关闭弹窗，事件传参
- * 5. prompt监听关闭类函数，通过参数判断关闭方式，执行回调函数，弹窗"明周期"结束
- * 6. 每个弹窗都要有 "唯一ID" 以及 "TYPE标识" 保证 "线程分离"，避免"暗周期"的出现
+ * [√] 1. 写DEMO，页面通过总线事件传参 prompt监听注入 测试。
+ * [√] 2. 整理总线函数，写计算函数，事件传参
+ * [√] 3. prompt组件监听唯一事件，通过参数标识判断需要执行的弹窗类型，弹窗在用户视图显示
+ * [√] 4. PCIe总线计时器，调用关闭弹窗，事件传参
+ * [ ] 5. prompt监听关闭类函数，通过参数判断关闭方式，执行回调函数，弹窗"明周期"结束
+ * [ ] 6. 每个弹窗都要有 "唯一ID" 以及 "TYPE标识" 保证 "线程分离"，避免"暗周期"的出现
  */
 
 /**
@@ -33,8 +33,6 @@
  * uni.$once(eventName, callback(Obj)) // 监听全局的自定义事件，事件由 uni.$emit 触发，但仅触发一次，在第一次触发之后移除该监听器。（其实没太懂 "事件由 uni.$emit 触发" 这句）
  * uni.$off([eventName, callback(Obj)]) // 移除全局自定义事件监听器。若uni.$off不传参，则移除App级别的所有事件监听器；
  */
-
-import promptView from "@/component/PCI/public/prompt.vue" // 即将舍弃
 
 let routeChange = function () {
   prompt.hideAll()
@@ -46,9 +44,8 @@ export let prompt = {
   // msg 弹窗
   msg: function (txt, opts) {
     const PT = 0
-    let setting = craft.settingEngine(txt, opts, PT)
-    if (typeof opts === "object") promptView.methods.showMsg(setting.text, opts, prompt.ins, PT)
-    else promptView.methods.showMsg(setting.text, {}, prompt.ins, PT)
+    let setting = craft.settingEngine(txt, opts, PT) // setting: {opts,time} | popArr: push(type,insID)
+    uni.$emit("showPrompt", setting.opts)
     craft.autoEngine(setting.time)
   },
   // error 弹框
@@ -118,7 +115,6 @@ export let prompt = {
   },
   // 手动关闭函数（不传参数时，先隐藏最后一个弹出的）
   hide: function (insId) {
-    if (!promptView.methods) return false
     if (prompt.popArr.length === 0) return false
     if ((!insId && typeof insId !== "number" && insId.trim() !== "") || typeof insId === "object") {
       let del = prompt.popArr.pop()
@@ -127,26 +123,26 @@ export let prompt = {
       prompt.popArr.forEach((element, index) => {
         if (element.insID === insId) {
           prompt.popArr.splice(index, 1)
-          promptView.methods.hide(element)
+          uni.$emit("hidePrompt", element)
         }
       })
     }
   },
   // 按照类型关闭弹窗
   hideType: function (type) {
-    if (!promptView.methods) return false
+    if (prompt.popArr.length === 0) return false
     prompt.popArr.forEach((element, index) => {
       if (element.type === type) {
         prompt.popArr.splice(index, 1)
-        promptView.methods.hide(element)
+        uni.$emit("hidePrompt", element)
       }
     })
   },
   // 全部关闭函数
   hideAll: function () {
-    if (!promptView.methods) return false
+    if (prompt.popArr.length === 0) return false
+    uni.$emit("hidePrompt", { type: "all", insID: prompt.popArr })
     prompt.popArr = []
-    promptView.methods.hideAll()
   },
   // 获取当前弹窗列表
   getList: function () {
@@ -156,15 +152,36 @@ export let prompt = {
 
 /* 以下为私域函数 */
 let craft = {
+  /* 弹窗计算引擎  文字计算，时间计算，配置计算，默认赋值... */
   settingEngine: function (txt, opts, type) {
-    prompt.hideType(type)
-    if (typeof txt !== "string") txt = JSON.stringify(txt)
-    prompt.popArr.push({ type: type, insID: prompt.ins })
-    if (opts !== undefined) {
-      if (typeof opts === "number") return { text: txt, time: opts }
-      else if (opts.time !== undefined && typeof opts.time === "number") return { text: txt, time: opts.time }
-      else return { text: txt, time: 3000 }
-    } else return { text: txt, time: 3000 }
+    let formatOpt = typeof opts !== "object" ? {} : opts // opts格式化
+    let isPass = formatOpt.isPass === undefined ? false : formatOpt.isPass // 是否允许穿透
+    let isMask = formatOpt.isMask === undefined ? false : formatOpt.isMask // 是否打开蒙板
+    let isBlur = formatOpt.isBlur === undefined ? true : formatOpt.isBlur // 是否打开底层高斯
+    let Z = parseInt(1000 + Number(prompt.ins))
+    // opts初始化计算
+    let initialOpt = {
+      id: prompt.ins, // ID注入
+      show: true,
+      txt: typeof txt === "string" ? txt : JSON.stringify(txt), // 弹窗文字
+      type,
+      pass: isPass ? "u-pe-none" : "u-pe-auto",
+      scroll: formatOpt.scroll === undefined ? true : formatOpt.scroll, // 是否允许滑动
+      isShut: formatOpt.isShut === undefined ? false : formatOpt.isShut, // 是否点击蒙版关闭
+      ani_m: formatOpt.ani_m === undefined ? "fade" : formatOpt.ani_m,
+      ani_c: formatOpt.ani_c === undefined ? "z-fade" : formatOpt.ani_c,
+      PromptClass: (formatOpt.isRow ? "u-flex-d-r " : "u-flex-d-c ") + (isBlur ? "blurCloud " : "") + (formatOpt.class || ""),
+      MaskStyle: (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (formatOpt.maskColor || "rgba(0,0,0,.6)") : ""), // 蒙版样式计算
+      PromptStyle: "box-shadow:" + (formatOpt.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (formatOpt.bgColor || "rgba(0,0,0,.6)") + ";color:" + (formatOpt.color || "#fff") + ";fontSize:" + (formatOpt.fontSize || "30rpx") + ";" + (formatOpt.style || ""), // 弹窗样式计算
+      Z,
+      cb: formatOpt.cb,
+    }
+    // prompt.hideType(type) // 先关闭
+    prompt.popArr.push({ type, insID: prompt.ins })
+    return {
+      opts: initialOpt,
+      time: opts !== undefined ? (typeof opts === "number" ? opts : opts.time !== undefined && typeof opts.time === "number" ? opts.time : 3000) : 3000,
+    }
   },
   autoEngine: function (time) {
     let insID = prompt.ins

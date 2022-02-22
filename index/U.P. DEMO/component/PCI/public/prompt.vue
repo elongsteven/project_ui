@@ -80,8 +80,15 @@
 <script>
 export default {
   name: "prompt",
-  onLoad() {
-    uni.$on("showPrompt", this.Engine(original)) // 弹窗触发总线路
+  created() {
+    // 弹窗触发总线路
+    uni.$on("showPrompt", opts => {
+      this.Engine(opts)
+    })
+    // 弹窗隐藏总线
+    uni.$on("hidePrompt", param => {
+      this.Hidden(param.type)
+    })
   },
   data() {
     return {
@@ -93,83 +100,77 @@ export default {
     }
   },
   methods: {
-    Engine(txt, opts, index, PT) {
-      // 默认配置引擎  default: 不穿透 无蒙版 可滑动 无点击蒙版关闭
-      let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
-      let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
-      let isBlur = opts.isBlur === undefined ? true : opts.isBlur // 是否打开底层高斯
-      let Z = parseInt(1000 + Number(index))
-      let MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : "") // 蒙版样式计算
-      let PromptStyle = "box-shadow:" + (opts.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (opts.bgColor || "rgba(0,0,0,.6)") + ";color:" + (opts.color || "#fff") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
-      let PromptClass = (opts.isRow ? "u-flex-d-r " : "u-flex-d-c ") + (isBlur ? "blurCloud " : "") + (opts.class || "")
-      return {
-        id: index, // ID
-        show: true,
-        type: PT,
-        pass: isPass ? "u-pe-none" : "u-pe-auto",
-        scroll: opts.scroll === undefined ? true : opts.scroll, // 是否允许滑动
-        isShut: opts.isShut === undefined ? false : opts.isShut, // 是否点击蒙版关闭
-        ani_m: opts.ani_m === undefined ? "fade" : opts.ani_m,
-        ani_c: opts.ani_c === undefined ? "z-fade" : opts.ani_c,
-        txt: txt || "", // 弹窗文字
-        PromptClass,
-        MaskStyle,
-        PromptStyle,
-        Z,
-        cb: opts.cb,
+    Engine(opts) {
+      console.log(opts)
+      console.log(this.MSG)
+      switch (opts.type) {
+        case 0:
+          this.MSG = opts
+          break
+        case 1:
+          this.STAT = opts
+          break
+        case 2:
+          this.LOAD = opts
+          break
+        case 3:
+          this.MODAL = opts
+          break
       }
-    },
-    showMsg(txt, opts, index, PT) {
-      let config = this.Engine(txt, opts, index, PT)
-      this.MSG = config
       console.log(this.MSG)
     },
-    showStatus(status, txt, opts, index, PT) {
-      let config = this.Engine(txt, opts, index, PT)
-      // status 图标附加属性
-      config.IconStyle = "width:" + (opts.iconWidth || "80rpx") + (opts.iconColor ? ";filter: drop-shadow(100vw 0 " + opts.iconColor + ");right: 100vw" : "") + ";" + (opts.iconStyle || "")
-      config.IconUrl = status !== undefined ? (typeof status === "number" ? this.icon[status] : status) : null
-      config.IconClass = "u-mg-8rp" + (opts.iconClass || "")
-      this.STAT = config
-    },
-    showLoad(txt, opts, index, PT) {
-      let config = this.Engine(txt, opts, index, PT)
-      // loading 加载层附加属性
-      config.LoadClass = "u-mg-24rp" + (opts.loadClass || "")
-      config.loadColor = opts.loadColor || "#fff"
-      config.LoadSize = opts.loadSize || "80rpx"
-      this.LOAD = config
-    },
-    showModal(view, opts, index, PT) {
-      let config = this.Engine(opts, index, PT)
-      // modal弹窗 部分配置是独立存在的 与公用的引默认值擎不同
-      let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
-      let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
-      let isBlur = opts.isBlur === undefined ? true : opts.isBlur // 是否打开底层高斯
-      let Z = parseInt(1000 + Number(index))
-      config.MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(255,255,255,.86)") : "") // 蒙版样式计算
-      config.PromptStyle = "box-shadow:" + (opts.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (opts.bgColor || "rgba(255,255,255,.86)") + ";color:" + (opts.color || "#333") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
-      config.PromptClass = (isBlur ? "blurCloud " : "") + (opts.class || "")
-      // modal弹窗 拓展属性
-      config.VTitle = view.title || ""
-      config.vtStyle = opts.vtStyle
-      config.VDesc = view.desc || "" // 弹窗文字
-      config.vdStyle = opts.vdStyle
-      config.btnList = opts.btn
-      config.setTime = opts.setTime || 0
-      config.setFn = opts.setFn || undefined
-      config.setHide = opts.setHide === undefined ? true : opts.setHide // 倒计时结束是否自动关闭
-      config.lineColor = opts.lineColor
-      this.MODAL = config
-      // modal弹窗 拓展功能
-      this.MODAL.btnList.forEach((item, index) => {
-        if (item.time > 0) this.timer(index, this.MODAL.id)
-      })
-      if (this.MODAL.setTime > 0) this.autoEvent(this.MODAL.id)
-    },
-    hide(obj) {
+    // showMsg(txt, opts, index, PT) {
+    //   let config = this.Engine(txt, opts, index, PT)
+    //   this.MSG = config
+    //   console.log(this.MSG)
+    // },
+    // showStatus(status, txt, opts, index, PT) {
+    //   let config = this.Engine(txt, opts, index, PT)
+    //   // status 图标附加属性
+    //   config.IconStyle = "width:" + (opts.iconWidth || "80rpx") + (opts.iconColor ? ";filter: drop-shadow(100vw 0 " + opts.iconColor + ");right: 100vw" : "") + ";" + (opts.iconStyle || "")
+    //   config.IconUrl = status !== undefined ? (typeof status === "number" ? this.icon[status] : status) : null
+    //   config.IconClass = "u-mg-8rp" + (opts.iconClass || "")
+    //   this.STAT = config
+    // },
+    // showLoad(txt, opts, index, PT) {
+    //   let config = this.Engine(txt, opts, index, PT)
+    //   // loading 加载层附加属性
+    //   config.LoadClass = "u-mg-24rp" + (opts.loadClass || "")
+    //   config.loadColor = opts.loadColor || "#fff"
+    //   config.LoadSize = opts.loadSize || "80rpx"
+    //   this.LOAD = config
+    // },
+    // showModal(view, opts, index, PT) {
+    //   let config = this.Engine(opts, index, PT)
+    //   // modal弹窗 部分配置是独立存在的 与公用的引默认值擎不同
+    //   let isPass = opts.isPass === undefined ? false : opts.isPass // 是否允许穿透
+    //   let isMask = opts.isMask === undefined ? false : opts.isMask // 是否打开蒙板
+    //   let isBlur = opts.isBlur === undefined ? true : opts.isBlur // 是否打开底层高斯
+    //   let Z = parseInt(1000 + Number(index))
+    //   config.MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (opts.maskColor || "rgba(255,255,255,.86)") : "") // 蒙版样式计算
+    //   config.PromptStyle = "box-shadow:" + (opts.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (opts.bgColor || "rgba(255,255,255,.86)") + ";color:" + (opts.color || "#333") + ";fontSize:" + (opts.fontSize || "30rpx") + ";" + (opts.style || "") // 弹窗样式计算
+    //   config.PromptClass = (isBlur ? "blurCloud " : "") + (opts.class || "")
+    //   // modal弹窗 拓展属性
+    //   config.VTitle = view.title || ""
+    //   config.vtStyle = opts.vtStyle
+    //   config.VDesc = view.desc || "" // 弹窗文字
+    //   config.vdStyle = opts.vdStyle
+    //   config.btnList = opts.btn
+    //   config.setTime = opts.setTime || 0
+    //   config.setFn = opts.setFn || undefined
+    //   config.setHide = opts.setHide === undefined ? true : opts.setHide // 倒计时结束是否自动关闭
+    //   config.lineColor = opts.lineColor
+    //   this.MODAL = config
+    //   // modal弹窗 拓展功能
+    //   this.MODAL.btnList.forEach((item, index) => {
+    //     if (item.time > 0) this.timer(index, this.MODAL.id)
+    //   })
+    //   if (this.MODAL.setTime > 0) this.autoEvent(this.MODAL.id)
+    // },
+    Hidden(type) {
+      console.log(type)
       // 隐藏指定弹框
-      switch (obj.type) {
+      switch (type) {
         case 0:
           if (this.MSG.cb) this.MSG.cb()
           this.MSG = { show: false }
@@ -186,12 +187,16 @@ export default {
           if (this.MODAL.cb) this.MODAL.cb()
           this.MODAL = { show: false }
           break
+        case "all":
+          if (this.MSG.cb) this.MSG.cb()
+          if (this.STAT.cb) this.STAT.cb()
+          if (this.LOAD.cb) this.LOAD.cb()
+          if (this.MODAL.cb) this.MODAL.cb()
+          this.MSG.show = this.STAT.show = this.LOAD.show = this.MODAL.show = false
+          break
       }
     },
-    hideAll() {
-      // 隐藏所有弹框
-      this.MSG.show = this.STAT.show = this.LOAD.show = this.MODAL.show = false
-    },
+    /* 内部使用 */
     maskTap(n) {
       // 蒙版功能 点击隐藏
       if (n.isShut && n.show) this.hide({ type: n.type })

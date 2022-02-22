@@ -1,5 +1,6 @@
 <template>
   <view>
+    <!-- 用户视图 -->
     <slot></slot>
     <prompt />
   </view>

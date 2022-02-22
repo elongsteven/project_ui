@@ -1,6 +1,6 @@
 <template>
   <page class="">
-    <button class="u-btn u-bd-e5e">1111</button>
+    <button class="u-btn u-bd-e5e" @click="demo">1111</button>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.msg('hello project-ui', { isPass: true })">msg 弹框</view>
     <view
       class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info"
@@ -31,8 +31,8 @@
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="t3">测试 3</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="ttt">关闭 2</view>
     <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="goto">byebye</view>
-    <view class="u-h-100vh"></view>
-    <view class="u-h-100vh"></view>
+    <!-- <view class="u-h-100vh"></view> -->
+    <!-- <view class="u-h-100vh"></view> -->
 
     <!-- <view class="u-mask u-ps-f u-ps-full" @touchmove.stop.prevent="function(){}"></view> -->
   </page>
@@ -49,6 +49,9 @@ export default {
     // this.myModal()
   },
   methods: {
+    demo() {
+      this.$prompt.msg("qwerty")
+    },
     myModal() {
       console.log(this.$prompt)
       this.$prompt.modal(
