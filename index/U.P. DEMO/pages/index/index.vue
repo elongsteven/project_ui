@@ -1,7 +1,7 @@
 <template>
   <page class="">
     <button class="u-btn u-bd-e5e" @click="demo">1111</button>
-    <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.msg('hello project-ui', { isPass: true })">msg 弹框</view>
+    <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.msg('hello project-ui', { isPass: true, isBlur: false })">msg 弹框</view>
     <view
       class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info"
       @click="
@@ -105,10 +105,12 @@ export default {
 .faded-leave-to {
   opacity: 0;
   transform: scale(0.6);
+  -webkit-transform: scale(0.6);
 }
 
 .faded-enter-active,
 .faded-leave-active {
   transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
 }
 </style>

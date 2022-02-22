@@ -41,35 +41,36 @@ let routeChange = function () {
 export let prompt = {
   ins: 0, // 弹窗ID
   popArr: [], // [type]  0:msg  1:status  2:load  3:modal
+  icons: ["/static/icon/fail.png", "/static/icon/success.png", "/static/icon/info.png", "/static/icon/question.png"],
   // msg 弹窗
   msg: function (txt, opts) {
     const PT = 0
     let setting = craft.settingEngine(txt, opts, PT) // setting: {opts,time} | popArr: push(type,insID)
     uni.$emit("showPrompt", setting.opts)
     craft.autoEngine(setting.time)
+    return prompt.ins
   },
   // error 弹框
   error: function (txt, opts) {
-    prompt.status(txt, opts, 0)
+    return prompt.status(txt, opts, 0)
   },
   // success 弹窗
   success: function (txt, opts) {
-    prompt.status(txt, opts, 1)
+    return prompt.status(txt, opts, 1)
   },
   // info 弹框
   info: function (txt, opts) {
-    prompt.status(txt, opts, 2)
+    return prompt.status(txt, opts, 2)
   },
   // info 弹框
   question: function (txt, opts) {
-    prompt.status(txt, opts, 3)
+    return prompt.status(txt, opts, 3)
   },
   // status 弹窗
   status: function (txt, opts, status) {
     const PT = 1
-    let setting = craft.settingEngine(txt, opts, PT)
-    if (typeof opts === "object") promptView.methods.showStatus(status, setting.text, opts, prompt.ins, PT)
-    else promptView.methods.showStatus(status, setting.text, {}, prompt.ins, PT)
+    let setting = craft.settingEngine(txt, opts, PT, status)
+    uni.$emit("showPrompt", setting.opts)
     craft.autoEngine(setting.time)
     return prompt.ins
   },
@@ -77,48 +78,25 @@ export let prompt = {
   load: function (txt, opts) {
     const PT = 2
     let setting = craft.settingEngine(txt, opts, PT)
-    if (typeof opts === "object") promptView.methods.showLoad(setting.text, opts, prompt.ins, PT)
-    else promptView.methods.showLoad(setting.text, {}, prompt.ins, PT)
+    uni.$emit("showPrompt", setting.opts)
     craft.autoEngine(setting.time)
     return prompt.ins
   },
   // modal 弹窗
   modal: function (view, opts) {
     const PT = 3
-    craft.settingEngine(undefined, undefined, PT)
-    if (!opts.lineColor) opts.lineColor = "#ccc"
-    // 初始化文字样式
-    if (!opts.vtStyle) opts.vtStyle = {}
-    if (!opts.vdStyle) opts.vdStyle = {}
-    if (!opts.vtStyle.fontSize) opts.vtStyle.fontSize = "34rpx"
-    if (!opts.vtStyle.fontWeight) opts.vtStyle.fontWeight = "bold"
-    // 按钮初始化 - 配置计算
-    if (!opts.btn || opts.btn.length === 0) opts.btn = [{ key: "确定" }]
-    opts.btn.forEach((item, index) => {
-      if (!item.key) item.key = "未定义"
-      if (!item.fn) item.fn = undefined
-      if (!item.time) item.time = 0
-      if (!item.style) {
-        if (opts.btn.length < 2) item.style = { color: "#4E90F6" }
-        else if (opts.btn.length === 2) {
-          if (index === 0) item.style = { color: "#ED0009" }
-          else item.style = { color: "#4E90F6" }
-        } else item.style = {}
-      }
-      if (!item.style.fontWeight) item.style.fontWeight = "bold"
-      if (!item.style.borderLeft) item.style.borderLeft = "1rpx solid" + opts.lineColor
-    })
-    if (typeof opts === "object") promptView.methods.showModal(view, opts, prompt.ins, PT)
-    else promptView.methods.showModal(view, {}, prompt.ins, PT)
+    let setting = craft.settingEngine(view, opts, PT)
+    uni.$emit("showPrompt", setting.opts)
     craft.autoEngine(0)
     return prompt.ins
   },
   // 手动关闭函数（不传参数时，先隐藏最后一个弹出的）
   hide: function (insId) {
     if (prompt.popArr.length === 0) return false
-    if ((!insId && typeof insId !== "number" && insId.trim() !== "") || typeof insId === "object") {
+    // (!insId && typeof insId !== "number" && insId.trim() !== "") || typeof insId === "object"
+    if (typeof insId !== "number") {
       let del = prompt.popArr.pop()
-      promptView.methods.hide(del) // hide函数
+      uni.$emit("hidePrompt", del)
     } else {
       prompt.popArr.forEach((element, index) => {
         if (element.insID === insId) {
@@ -153,13 +131,14 @@ export let prompt = {
 /* 以下为私域函数 */
 let craft = {
   /* 弹窗计算引擎  文字计算，时间计算，配置计算，默认赋值... */
-  settingEngine: function (txt, opts, type) {
+  settingEngine: function (txt, opts, type, others) {
+    /* 公用变量 */
     let formatOpt = typeof opts !== "object" ? {} : opts // opts格式化
     let isPass = formatOpt.isPass === undefined ? false : formatOpt.isPass // 是否允许穿透
     let isMask = formatOpt.isMask === undefined ? false : formatOpt.isMask // 是否打开蒙板
     let isBlur = formatOpt.isBlur === undefined ? true : formatOpt.isBlur // 是否打开底层高斯
     let Z = parseInt(1000 + Number(prompt.ins))
-    // opts初始化计算
+    /* opts单元初始化计算 */
     let initialOpt = {
       id: prompt.ins, // ID注入
       show: true,
@@ -168,15 +147,66 @@ let craft = {
       pass: isPass ? "u-pe-none" : "u-pe-auto",
       scroll: formatOpt.scroll === undefined ? true : formatOpt.scroll, // 是否允许滑动
       isShut: formatOpt.isShut === undefined ? false : formatOpt.isShut, // 是否点击蒙版关闭
-      ani_m: formatOpt.ani_m === undefined ? "fade" : formatOpt.ani_m,
-      ani_c: formatOpt.ani_c === undefined ? "z-fade" : formatOpt.ani_c,
+      ani_m: formatOpt.ani_m === undefined || !Array.isArray(formatOpt.ani_m) ? ["fade"] : formatOpt.ani_m,
+      ani_c: formatOpt.ani_c === undefined || !Array.isArray(formatOpt.ani_c) ? ["fade", "zoom-in"] : formatOpt.ani_c,
       PromptClass: (formatOpt.isRow ? "u-flex-d-r " : "u-flex-d-c ") + (isBlur ? "blurCloud " : "") + (formatOpt.class || ""),
       MaskStyle: (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (formatOpt.maskColor || "rgba(0,0,0,.6)") : ""), // 蒙版样式计算
       PromptStyle: "box-shadow:" + (formatOpt.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (formatOpt.bgColor || "rgba(0,0,0,.6)") + ";color:" + (formatOpt.color || "#fff") + ";fontSize:" + (formatOpt.fontSize || "30rpx") + ";" + (formatOpt.style || ""), // 弹窗样式计算
       Z,
       cb: formatOpt.cb,
     }
-    // prompt.hideType(type) // 先关闭
+    /* 其他单元计算 */
+    if (initialOpt.type === 1) {
+      // status 图标附加属性
+      initialOpt.IconStyle = "width:" + (formatOpt.iconWidth || "80rpx") + (formatOpt.iconColor ? ";filter: drop-shadow(100vw 0 " + formatOpt.iconColor + ");right: 100vw" : "") + ";" + (formatOpt.iconStyle || "")
+      initialOpt.IconUrl = others !== undefined ? (typeof others === "number" ? prompt.icons[others] : others) : null
+      initialOpt.IconClass = "u-mg-8rp" + (formatOpt.iconClass || "")
+    } else if (initialOpt.type === 2) {
+      // loading 加载层附加属性
+      initialOpt.LoadClass = "u-mg-24rp" + (formatOpt.loadClass || "")
+      initialOpt.loadColor = formatOpt.loadColor || "#fff"
+      initialOpt.LoadSize = formatOpt.loadSize || "80rpx"
+    } else if (initialOpt.type === 3) {
+      let view = txt
+        console.log(view)
+      /* 处理格式化后的数据列 */
+      if (!formatOpt.vtStyle) formatOpt.vtStyle = {}
+      if (!formatOpt.vdStyle) formatOpt.vdStyle = {}
+      if (!formatOpt.vtStyle.fontSize) formatOpt.vtStyle.fontSize = "34rpx"
+      if (!formatOpt.vtStyle.fontWeight) formatOpt.vtStyle.fontWeight = "bold"
+      if (!formatOpt.btn || formatOpt.btn.length === 0) formatOpt.btn = [{ key: "确定" }]
+      formatOpt.btn.forEach((item, index) => {
+        if (!item.key) item.key = "未定义"
+        if (!item.fn) item.fn = undefined
+        if (!item.time) item.time = 0
+        if (!item.style) {
+          if (formatOpt.btn.length < 2) item.style = { color: "#4E90F6" }
+          else if (formatOpt.btn.length === 2) {
+            if (index === 0) item.style = { color: "#ED0009" }
+            else item.style = { color: "#4E90F6" }
+          } else item.style = {}
+        }
+        if (!item.style.fontWeight) item.style.fontWeight = "bold"
+        if (!item.style.borderLeft) item.style.borderLeft = "1rpx solid" + formatOpt.lineColor
+      })
+      // modal弹窗 部分配置是独立存在的 与公用的引默认值擎不同
+      initialOpt.txt = ""
+      initialOpt.MaskStyle = (isPass ? "z-index:-1" : "z-index:" + Z) + (isMask ? ";background:" + (formatOpt.maskColor || "rgba(255,255,255,.86)") : "") // 蒙版样式计算
+      initialOpt.PromptStyle = "box-shadow:" + (formatOpt.shadow || "0 0 8rpx 5rpx rgba(0,0,0,0.2)") + ";z-index:" + Z + ";background:" + (formatOpt.bgColor || "rgba(255,255,255,.86)") + ";color:" + (formatOpt.color || "#333") + ";fontSize:" + (formatOpt.fontSize || "30rpx") + ";" + (formatOpt.style || "") // 弹窗样式计算
+      initialOpt.PromptClass = (isBlur ? "blurCloud " : "") + (formatOpt.class || "")
+      // modal弹窗 拓展属性
+      initialOpt.lineColor = formatOpt.lineColor || "#ccc" // 分线颜色
+      initialOpt.VTitle = view.title || "" // 弹窗标题文字
+      initialOpt.VDesc = view.desc || "" // 弹窗描述文字
+      initialOpt.vtStyle = formatOpt.vtStyle || {}
+      initialOpt.vdStyle = formatOpt.vdStyle || {}
+      initialOpt.btnList = formatOpt.btn
+      initialOpt.setTime = formatOpt.setTime || 0
+      initialOpt.setFn = formatOpt.setFn || undefined
+      initialOpt.setHide = formatOpt.setHide === undefined ? true : formatOpt.setHide // 倒计时结束是否自动关闭
+    }
+    /* 公用引擎初始化完毕 */
+    prompt.hideType(type) // 先关闭
     prompt.popArr.push({ type, insID: prompt.ins })
     return {
       opts: initialOpt,
