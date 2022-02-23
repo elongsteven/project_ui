@@ -1,12 +1,13 @@
 import App from "./App"
 import PCIe from "@/component/PCI/PCIe.vue"
-import { prompt } from "@/component/PCI/PCIe.js"
+import { prompt, vRoute } from "@/component/PCI/PCIe.js"
 
 // #ifndef VUE3
 import Vue from "vue"
 Vue.config.productionTip = false
 Vue.component("page", PCIe) // 引入全局组件 2.x
 Vue.prototype.$prompt = prompt // 注册方法
+Vue.prototype.$vRoute = vRoute // 注册方法
 App.mpType = "app"
 const app = new Vue({
   ...App,

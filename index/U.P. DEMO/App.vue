@@ -11,7 +11,8 @@ export default {
   },
   watch: {
     $route: function (from, to) {
-      this.$prompt.routeChange(from, to)
+      console.log(from, to)
+      this.$vRoute.change(this.$prompt.hideAll)
     },
   },
 }

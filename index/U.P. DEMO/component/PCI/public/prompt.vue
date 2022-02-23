@@ -1,7 +1,6 @@
 <template>
   <view>
     <!-- msg -->
-    <!-- MSG.ani_m -->
     <uni-transition :show="MSG.show" :mode-class="MSG.ani_m">
       <view v-if="!MSG.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: MSG.Z - 10 }" @touchmove.stop.prevent="() => {}"></view>
       <view @click="maskTap(MSG)" class="u-ps-f u-ps-full" :class="MSG.pass" :style="MSG.MaskStyle"></view>
