@@ -164,7 +164,6 @@ let craft = {
       initialOpt.LoadSize = formatOpt.loadSize || "80rpx"
     } else if (initialOpt.type === 3) {
       let view = txt
-      console.log(view)
       /* 处理格式化后的数据列 */
       if (!formatOpt.vtStyle) formatOpt.vtStyle = {}
       if (!formatOpt.vdStyle) formatOpt.vdStyle = {}

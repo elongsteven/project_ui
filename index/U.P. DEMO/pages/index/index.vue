@@ -70,6 +70,7 @@ export default {
     },
     goto() {
       uni.navigateTo({ url: "/pages/index/demo" })
+      // console.log("route", this.$route)
     },
     t1() {
       console.log(this.$prompt.msg("111", { isPass: true, time: 10000 }))

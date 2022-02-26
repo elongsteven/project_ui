@@ -9,12 +9,6 @@ export default {
   onHide: function () {
     console.log("App Hide")
   },
-  watch: {
-    $route: function (from, to) {
-      console.log(from, to)
-      this.$vRoute.change(this.$prompt.hideAll)
-    },
-  },
 }
 </script>
 

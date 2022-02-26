@@ -73,6 +73,10 @@ export default {
     uni.$on("hidePrompt", param => {
       this.Hidden(param.type)
     })
+    // uni.$on("router", (from, to) => {
+    //   console.log("router$on", from, to)
+    //   this.Hidden("all")
+    // })
   },
   data() {
     return {
@@ -105,7 +109,6 @@ export default {
       }
     },
     Hidden(type) {
-      console.log(type)
       // 隐藏指定弹框
       switch (type) {
         case 0:

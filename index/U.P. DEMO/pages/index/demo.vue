@@ -1,5 +1,9 @@
 <template>
-  <view></view>
+  <page>
+    <view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="$vRoute.path">byebye</view>
+    </view>
+  </page>
 </template>
 
 <script>
@@ -7,7 +11,7 @@ export default {
   data() {
     return {}
   },
-  onLoad() {
+  onReady() {
     this.$prompt.modal(
       { title: "加载中", desc: "请稍后..." },
       {
@@ -22,7 +26,11 @@ export default {
       }
     )
   },
-  methods: {},
+  methods: {
+    goto() {
+      this.$vRoute.path("/page/index/p1")
+    },
+  },
 }
 </script>
 

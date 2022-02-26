@@ -11,6 +11,36 @@
       "style": {
         "navigationBarTitleText": "demo"
       }
+    },
+    {
+      "path": "pages/index/p1",
+      "style": {
+        "navigationBarTitleText": "I"
+      }
+    },
+    {
+      "path": "pages/index/p2",
+      "style": {
+        "navigationBarTitleText": "II"
+      }
+    },
+    {
+      "path": "pages/index/p3",
+      "style": {
+        "navigationBarTitleText": "III"
+      }
+    },
+    {
+      "path": "pages/index/p4",
+      "style": {
+        "navigationBarTitleText": "IV"
+      }
+    },
+    {
+      "path": "pages/index/p5",
+      "style": {
+        "navigationBarTitleText": "V"
+      }
     }
   ],
   "globalStyle": {
