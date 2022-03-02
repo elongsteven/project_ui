@@ -86,6 +86,33 @@ export let promptAPI = {
     craft.autoEngine(0)
     return promptAPI.ins
   },
+  mine: function (opts) {
+    const PT = 4
+    // let setting = craft.settingEngine(view, opts, PT)
+    /* 公用变量 */
+    if (!opts || typeof opts !== "object") opts = {} // opts格式化
+    let Z = parseInt(1000 + Number(promptAPI.ins))
+    /* opts单元初始化计算 */
+    let initialOpt = {
+      id: promptAPI.ins, // ID注入
+      show: true,
+      type: PT,
+      pass: "u-pe-auto",
+      scroll: opts.scroll === undefined ? true : opts.scroll, // 是否允许滑动
+      isShut: opts.isShut === undefined ? true : opts.isShut, // 是否点击蒙版关闭
+      ani_m: opts.ani_m === undefined || !Array.isArray(opts.ani_m) ? ["fade"] : opts.ani_m,
+      ani_c: opts.ani_c === undefined || !Array.isArray(opts.ani_c) ? ["fade"] : opts.ani_c,
+      MaskStyle: "z-index:" + Z + ((opts.isMask === undefined ? true : opts.isMask) ? ";background:" + (opts.maskColor || "rgba(0,0,0,.6)") : ""), // 蒙版样式计算
+      Z,
+      cb: opts.cb,
+    }
+    /* 公用引擎初始化完毕 */
+    promptAPI.hideType(PT) // 先关闭
+    promptAPI.popArr.push({ type: PT, insID: promptAPI.ins })
+    uni.$emit("showPrompt", initialOpt)
+    craft.autoEngine(0)
+    return promptAPI.ins
+  },
   // 手动关闭函数（不传参数时，先隐藏最后一个弹出的）
   hide: function (insId) {
     if (promptAPI.popArr.length === 0) return false

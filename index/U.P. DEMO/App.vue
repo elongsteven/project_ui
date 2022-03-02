@@ -9,6 +9,18 @@ export default {
   onHide: function () {
     console.log("App Hide")
   },
+  watch: {
+    $route: function (from, to) {
+      console.group("pages")
+      getCurrentPages().forEach(item => {
+        console.log(item.route)
+      })
+      console.groupEnd("pages")
+      // console.log("getCurrentPages", [getCurrentPages().length - 1].route)
+      // console.log("getCurrentPages", getCurrentPages()[getCurrentPages().length - 1].route)
+      // this.$vRoute.change(from, to)
+    },
+  },
 }
 </script>
 

@@ -58,6 +58,16 @@
         </view>
       </view>
     </uni-transition>
+    <!-- mine -->
+    <uni-transition :show="MINE.show" :mode-class="MINE.ani_m">
+      <view v-if="!MINE.scroll" class="u-ps-f u-ps-full u-pe-auto" :style="{ zIndex: MINE.Z - 10 }" @touchmove.stop.prevent="() => {}"></view>
+      <view @click="maskTap(MINE)" class="u-ps-f u-ps-full" :class="MINE.pass" :style="MINE.MaskStyle"></view>
+    </uni-transition>
+    <uni-transition :show="MINE.show" :mode-class="MINE.ani_c" custom-class="u-ps-f u-ps-full u-pe-none" :styles="{ zIndex: MINE.Z }">
+      <view @click.stop class="u-ps-f u-ps-center">
+        <slot></slot>
+      </view>
+    </uni-transition>
   </view>
 </template>
 
@@ -65,6 +75,9 @@
 export default {
   name: "prompt",
   created() {
+    // 每次创建监听器前先删除之前的监听器，防止串线
+    uni.$off("showPrompt")
+    uni.$off("hidePrompt")
     // 弹窗触发总线路
     uni.$on("showPrompt", opts => {
       this.Engine(opts)
@@ -84,6 +97,7 @@ export default {
       STAT: { show: false },
       LOAD: { show: false },
       MODAL: { show: false },
+      MINE: { show: false },
     }
   },
   methods: {
@@ -105,6 +119,10 @@ export default {
             if (item.time > 0) this.timer(index, this.MODAL.id)
           })
           if (this.MODAL.setTime > 0) this.autoEvent(this.MODAL.id)
+          break
+        case 4:
+          console.log(opts)
+          this.MINE = opts
           break
       }
     },
@@ -131,19 +149,24 @@ export default {
           // this.MODAL = { show: false }
           this.MODAL.show = false
           break
+        case 4:
+          if (this.MINE.cb) this.MINE.cb()
+          this.MINE.show = false
+          break
         case "all":
           if (this.MSG.cb) this.MSG.cb()
           if (this.STAT.cb) this.STAT.cb()
           if (this.LOAD.cb) this.LOAD.cb()
           if (this.MODAL.cb) this.MODAL.cb()
-          this.MSG.show = this.STAT.show = this.LOAD.show = this.MODAL.show = false
+          if (this.MINE.cb) this.MINE.cb()
+          this.MSG.show = this.STAT.show = this.LOAD.show = this.MODAL.show = this.MINE.show = false
           break
       }
     },
     /* 内部使用 */
     maskTap(n) {
       // 蒙版功能 点击隐藏
-      if (n.isShut && n.show) this.hide({ type: n.type })
+      if (n.isShut && n.show) this.Hidden(n.type)
     },
     /* Modal 功能拓展坞 */
     modalEvent(fn) {

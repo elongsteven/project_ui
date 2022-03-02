@@ -1,9 +1,9 @@
 <template>
-  <page>
-    <view>
-      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="$vRoute.path">byebye</view>
+  <basic>
+    <view slot="page">
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="goto">byebye</view>
     </view>
-  </page>
+  </basic>
 </template>
 
 <script>
@@ -16,19 +16,29 @@ export default {
       { title: "加载中", desc: "请稍后..." },
       {
         isPass: true,
-        setTime: 10,
+        setTime: 30,
         setFn: this.fn3,
-        lineColor: "#000",
+        lineColor: "#fff",
         btn: [
           { key: "Delete", style: { color: "#999" }, fn: this.fn1 },
-          { key: "Cancel", fn: this.fn1, time: 30 },
+          { key: "Cancel", fn: this.fn1, time: 10 },
         ],
       }
     )
   },
   methods: {
     goto() {
-      this.$vRoute.path("/page/index/p1")
+      this.$vRoute.path(
+        "/pages/index/p1",
+        { ids: 12121, aa: { a: 152323 } },
+        {
+          fn: function () {
+            for (var i = 0; i < 16000; i++) {
+              console.log(i)
+            }
+          },
+        }
+      )
     },
   },
 }
