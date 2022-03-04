@@ -115,6 +115,7 @@ export let promptAPI = {
   },
   // 手动关闭函数（不传参数时，先隐藏最后一个弹出的）
   hide: function (insId) {
+    console.log(insId)
     if (promptAPI.popArr.length === 0) return false
     // (!insId && typeof insId !== "number" && insId.trim() !== "") || typeof insId === "object"
     if (typeof insId !== "number") {
@@ -240,8 +241,8 @@ let craft = {
     if (time != 0) {
       setTimeout(() => {
         promptAPI.hide(insID)
-        promptAPI.ins++
       }, time)
+      promptAPI.ins++
     } else promptAPI.ins++
   },
   ArrDebug: function (arr) {

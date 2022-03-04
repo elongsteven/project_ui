@@ -9,7 +9,7 @@
           $prompt.msg('hello project-ui', {
             isPass: true,
             cb: function () {
-              $prompt.success('cb')
+              $prompt.success('cb', { isPass: true })
             },
           })
         "
@@ -32,7 +32,7 @@
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="t3">测试 3</view>
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="ttt">关闭 2</view>
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="goto">byebye</view>
-      
+
       <!-- <view class="u-h-100vh"></view> -->
       <!-- <view class="u-h-100vh"></view> -->
       <!-- <view class="u-mask u-ps-f u-ps-full" @touchmove.stop.prevent="function(){}"></view> -->

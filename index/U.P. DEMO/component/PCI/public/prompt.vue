@@ -80,7 +80,9 @@ export default {
     uni.$off("hidePrompt")
     // 弹窗触发总线路
     uni.$on("showPrompt", opts => {
-      this.Engine(opts)
+      setTimeout(() => {
+        this.Engine(opts)
+      }, 100)
     })
     // 弹窗隐藏总线
     uni.$on("hidePrompt", param => {
