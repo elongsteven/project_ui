@@ -2,12 +2,15 @@
   <basic>
     <view slot="page">
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="goto">byebye</view>
+      <tester>12212112</tester>
     </view>
   </basic>
 </template>
 
 <script>
+import Tester from "@/component/demotest/demotest.vue"
 export default {
+  components: { Tester },
   data() {
     return {}
   },

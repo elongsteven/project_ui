@@ -4,14 +4,17 @@
     <!-- 用户视图 -->
     <slot name="page"></slot>
     <prompt><slot name="pop"></slot></prompt>
+    <floater></floater>
   </view>
 </template>
 
 <script>
-import Prompt from "@/component/PCI/public/prompt.vue"
+import Prompt from "@/component/PCI/public/prompt/prompt.vue"
+import Floater from "@/component/PCI/public/floater/floater.vue"
+
 export default {
   name: "basic",
-  components: { Prompt },
+  components: { Prompt, Floater },
   created() {
     console.log(161231564)
   },

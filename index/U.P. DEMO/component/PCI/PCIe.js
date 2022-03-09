@@ -1,4 +1,4 @@
-import { promptAPI } from "./public/prompt.js"
+import { promptAPI } from "./public/prompt/prompt.js"
 
 export let prompt = promptAPI
 
