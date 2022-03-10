@@ -31,17 +31,13 @@ export default {
   },
   methods: {
     goto() {
-      this.$vRoute.path(
-        "/pages/index/p1",
-        { ids: 12121, aa: { a: 152323 } },
-        {
-          fn: function () {
-            for (var i = 0; i < 16000; i++) {
-              console.log(i)
-            }
-          },
-        }
-      )
+      this.$vRoute.path("/pages/index/p1", {
+        fn: function () {
+          for (var i = 0; i < 16000; i++) {
+            console.log(i)
+          }
+        },
+      })
     },
   },
 }

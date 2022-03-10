@@ -2,6 +2,22 @@ import { promptAPI } from "./public/prompt/prompt.js"
 
 export let prompt = promptAPI
 
+let pageDataComp = function (obj) {
+  if (!obj || typeof obj === "object") {
+    console.warn("参数类型需为对象")
+    return ""
+  }
+  let dataStr = ""
+  let i = 0
+  for (var key in data) {
+    if (i > 0) dataStr += "&"
+    else dataStr += "?"
+    dataStr += key + "=" + JSON.stringify(data[key])
+    i++
+  }
+  return dataStr
+}
+
 export let vRoute = {
   FIRST: true,
   index: 0,
@@ -19,26 +35,13 @@ export let vRoute = {
       // })
     })
   },
-  computer: function (url, data, opts, from) {
+  computer: function (url, opts, from) {
     return new Promise(resolve => {
-      let dataStr = ""
+      let routes = getCurrentPages()
+      uni.$emit("router", { from: routes[routes.length - 1].route, to: url })
       if (!opts) opts = {}
-      if (data) {
-        if (typeof data === "object") {
-          let i = 0
-          for (var key in data) {
-            if (i > 0) dataStr += "&"
-            else dataStr += "?"
-            dataStr += key + "=" + JSON.stringify(data[key])
-            i++
-          }
-        } else if (typeof data === "string") {
-          dataStr = "?" + data
-        }
-      }
-      console.log("dataStr", dataStr)
       let rule = {
-        url: url + dataStr,
+        url,
         fail: opts.fail && typeof opts.fail == "function" ? opts.fail : undefined,
         success: opts.success && typeof opts.success == "function" ? opts.success : undefined,
         complete: opts.complete && typeof opts.complete == "function" ? opts.complete : undefined,
@@ -51,8 +54,8 @@ export let vRoute = {
       } else resolve(rule)
     })
   },
-  async path(url, data, opts) {
-    let rule = await this.computer(url, data, opts, "path")
+  async path(url, opts) {
+    let rule = await this.computer(url, opts, "path")
     if (opts && opts.fn) await this.executor(opts.fn)
     uni.navigateTo(rule)
   },
@@ -68,10 +71,10 @@ export let vRoute = {
   back: function (delta, param) {},
   load: function (url, param) {},
   change: function (from, to) {
-    uni.$emit("router", { from, to })
-    if (this.index === 0) this.history.push(from)
-    if (this.history[this.index - 1] === from) this.history.push(to)
-    this.index++
+    // uni.$emit("router", { from, to })
+    // if (this.index === 0) this.history.push(from)
+    // if (this.history[this.index - 1] === from) this.history.push(to)
+    // this.index++
     // console.log(this.index, this.history)
   },
   set: function (page, from) {
