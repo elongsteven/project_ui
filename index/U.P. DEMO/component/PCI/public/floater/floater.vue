@@ -1,6 +1,6 @@
 <template>
   <!-- 'left:' + moveX + 'px;top:' + moveY + 'px;'    -->
-  <view @touchstart="gotElem" @touchmove.prevent="dragging" class="u-ps-f u-z-ultra" :style="{ left: moveX + 'px', top: moveY + 'px', width: size[0] + 'px', height: size[1] + 'px', transform: 'translate(-50%,-50%)' }">
+  <view @touchstart="gotElem" @touchmove.prevent="dragging" @touchend="fixed" class="u-ps-f u-z-ultra" :style="{ left: moveX + 'px', top: moveY + 'px', width: size[0] + 'px', height: size[1] + 'px', transform: 'translate(-50%,-50%)' }">
     <view class="u-w-100 u-h-100 u-bg-e5e">悬浮钮未完成</view>
   </view>
 </template>
@@ -11,21 +11,19 @@ export default {
   created() {},
   data() {
     return {
+      isFixed: true,
       size: [50, 50],
       safeDist: [20, 20],
       start: [0, 0],
+      windowSize: ["", ""],
       moveX: 20,
       moveY: 20,
-      windowWidth: "",
-      windowHeight: "",
     }
   },
   created() {
-    console.log(uni.getSystemInfoSync())
     const { windowWidth, windowHeight } = uni.getSystemInfoSync()
-    this.windowWidth = windowWidth
-    this.windowHeight = windowHeight
-    console.log(this.windowWidth, this.windowHeight);
+    this.windowSize[0] = windowWidth
+    this.windowSize[1] = windowHeight
     this.moveX = this.size[0] / 2 + this.safeDist[0]
     this.moveY = this.size[1] / 2 + this.safeDist[1]
   },
@@ -35,26 +33,22 @@ export default {
       this.start[0] = event.touches[0].clientX - this.moveX
       this.start[1] = event.touches[0].clientY - this.moveY
     },
-    dragging(event) {
+    dragging: function (event) {
+      // 偏移量运算，保证拖动的一瞬间不位移
       let tag = event.touches
-      // if (tag[0].clientX < 20) {
-      //   tag[0].clientX = 20
-      // }
-      // if (tag[0].clientY < 20) {
-      //   tag[0].clientY = 20
-      // }
-      // if (tag[0].clientX > this.windowWidth - 20) {
-      //   tag[0].clientX = this.windowWidth - 20
-      // }
-      // if (tag[0].clientY > this.windowHeight - 20) {
-      //   tag[0].clientY = this.windowHeight - 20
-      // }
       this.moveX = tag[0].clientX - this.start[0]
       this.moveY = tag[0].clientY - this.start[1]
-      if (this.moveX < this.size[0] / 2 + this.safeDist[0]) this.moveX = this.size[0] / 2 + this.safeDist[0]
-      if (this.moveY < this.size[1] / 2 + this.safeDist[1]) this.moveY = this.size[1] / 2 + this.safeDist[1]
-      if (this.moveX > this.windowWidth - this.size[0] / 2 - this.safeDist[0]) this.moveX = this.windowWidth - this.size[0] / 2 - this.safeDist[0]
-      if (this.moveY > this.windowHeight - this.size[1] / 2 - this.safeDist[1]) this.moveY = this.windowHeight - this.size[1] / 2 - this.safeDist[1]
+      // 屏幕安全边距
+      if (this.moveX < this.size[0] / 2 + this.safeDist[0]) this.moveX = this.size[0] / 2 + this.safeDist[0] // left
+      if (this.moveY < this.size[1] / 2 + this.safeDist[1]) this.moveY = this.size[1] / 2 + this.safeDist[1] // top
+      if (this.moveX > this.windowSize[0] - this.size[0] / 2 - this.safeDist[0]) this.moveX = this.windowSize[0] - this.size[0] / 2 - this.safeDist[0] // right
+      if (this.moveY > this.windowSize[1] - this.size[1] / 2 - this.safeDist[1]) this.moveY = this.windowSize[1] - this.size[1] / 2 - this.safeDist[1] // bottom
+    },
+    fixed: function () {
+      if (!this.isFixed) return false // 松手时自动定位
+      if (this.moveX > this.windowSize[0] / 2) this.moveX = this.windowSize[0] - this.size[0] / 2 - this.safeDist[0]
+      else this.moveX = this.size[0] / 2 + this.safeDist[0]
+      console.log()
     },
   },
 }
