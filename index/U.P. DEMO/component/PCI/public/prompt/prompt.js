@@ -115,7 +115,6 @@ export let promptAPI = {
   },
   // 手动关闭函数（不传参数时，先隐藏最后一个弹出的）
   hide: function (insId) {
-    console.log(insId)
     if (promptAPI.popArr.length === 0) return false
     // (!insId && typeof insId !== "number" && insId.trim() !== "") || typeof insId === "object"
     if (typeof insId !== "number") {
@@ -247,7 +246,7 @@ let craft = {
   },
   ArrDebug: function (arr) {
     arr.forEach(item => {
-      console.log(item)
+      this.$print(item)
     })
   },
 }

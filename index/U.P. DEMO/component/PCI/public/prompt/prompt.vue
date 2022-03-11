@@ -89,7 +89,7 @@ export default {
       this.Hidden(param.type)
     })
     // uni.$on("router", (from, to) => {
-    //   console.log("router$on", from, to)
+    //   this.$print("router$on", from, to)
     //   this.Hidden("all")
     // })
   },
@@ -123,7 +123,7 @@ export default {
           if (this.MODAL.setTime > 0) this.autoEvent(this.MODAL.id)
           break
         case 4:
-          console.log(opts)
+          this.$print(opts)
           this.MINE = opts
           break
       }

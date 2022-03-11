@@ -49,6 +49,7 @@ export default {
     }
   },
   onReady() {
+    this.$print([21212121])
     // this.myModal()
   },
   methods: {

@@ -16,7 +16,7 @@ export default {
   name: "basic",
   components: { Prompt, Floater },
   created() {
-    console.log(161231564)
+    this.$print(161231564)
   },
   data() {
     return {
@@ -24,7 +24,7 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted", getCurrentPages()[getCurrentPages().length - 1].route)
+    this.$print("mounted", getCurrentPages()[getCurrentPages().length - 1].route)
     // let pages = getCurrentPages()[getCurrentPages().length - 1].route
     // this.$vRoute.set(pages, "created")
   },
