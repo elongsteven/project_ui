@@ -1,15 +1,16 @@
 <template>
-  <!-- 'left:' + moveX + 'px;top:' + moveY + 'px;'    -->
-  <view @touchstart="gotElem" @touchmove.prevent="dragging" @touchend="fixed" class="u-ps-f u-z-ultra u-tran--50" :style="{ left: moveX + 'px', top: moveY + 'px', width: size[0] + 'px', height: size[1] + 'px' }">
-    <view @click="toggle" class="u-w-100 u-h-100 u-bg-white u-f-10rp u-f-b u-radius-50 shadow u-flex u-flex-ai-c u-flex-jc-c">
-      快捷
-      <br />
-      导航
+  <view>
+    <view @touchstart="gotElem" @touchmove.prevent="dragging" @touchend="fixed" class="u-ps-f u-z-ultra u-tran--50" :style="{ left: moveX + 'px', top: moveY + 'px', width: size[0] + 'px', height: size[1] + 'px' }">
+      <view @click="toggle" class="u-w-100 u-h-100 u-bg-white u-f-b u-radius-50 shadow u-flex u-flex-ai-c u-flex-jc-c u-flex-d-c">
+        <view class="u-f-21rp">快捷</view>
+        <view class="u-f-21rp">导航</view>
+      </view>
+      <view v-show="showNav" class="u-pd-tb-20rp u-ps-a u-ps-l50 u-w-80rp u-bg-e5e u-radius-cap u-flex u-flex-d-c u-flex-jc-c u-flex-ai-c u-t-c" :style="topPart ? 'top:0' : 'bottom:0'">
+        <view @touchmove.prevent.stop v-for="(item, index) in NavButtons" :key="index" class="u-f-21rp u-pd-tb-10rp u-flex-o-1" style="white-space: pre-line">{{ item }}</view>
+        <view @click="showNav = false" class="u-f-21rp" :class="topPart ? 'u-flex-o-0' : 'u-flex-o-15'">关闭</view>
+      </view>
     </view>
-    <view v-show="showNav" class="u-pd-tb-20rp u-ps-a u-f-12rp u-ps-l50 u-w-80rp u-bg-e5e u-radius-cap u-flex u-flex-d-c u-flex-jc-c u-flex-ai-c u-t-c" :style="topPart ? 'top:0' : 'bottom:0'">
-      <view v-for="(item, index) in NavButtons" :key="index" class="u-pd-tb-10rp u-flex-o-1">{{ item }}</view>
-      <view @click="showNav = false" :class="topPart ? 'u-flex-o-0' : 'u-flex-o-15'">关闭</view>
-    </view>
+    <view v-show="showNav" class="u-ps-f u-ps-full" @click="showNav = false"></view>
   </view>
 </template>
 
@@ -29,7 +30,7 @@ export default {
       moveY: 20,
       showNav: false,
       topPart: false,
-      NavButtons: ["一点百通", "测一测", "绿色商城", "产品分类", "购物车", "我的上大夫", "转发分享"],
+      NavButtons: ["一点\n百通", "测一测", "绿色\n商城", "产品\n分类", "购物车", "我的\n上大夫", "转发\n分享"],
     }
   },
   created() {
@@ -63,6 +64,7 @@ export default {
       if (this.moveY < this.size[1] / 2 + this.safeDist[1]) this.moveY = this.size[1] / 2 + this.safeDist[1] // top
       if (this.moveX > this.windowSize[0] - this.size[0] / 2 - this.safeDist[0]) this.moveX = this.windowSize[0] - this.size[0] / 2 - this.safeDist[0] // right
       if (this.moveY > this.windowSize[1] - this.size[1] / 2 - this.safeDist[1]) this.moveY = this.windowSize[1] - this.size[1] / 2 - this.safeDist[1] // bottom
+      if (this.showNav) this.showNav = false
     },
     fixed: function () {
       if (!this.isFixed) return false // 自动贴边开关，下方是松手时自动定位
@@ -89,5 +91,8 @@ export default {
 .shadow {
   box-shadow: 0rpx 0rpx 8rpx rgba(0, 0, 0, 0.3);
   opacity: 0.9;
+}
+.shrink {
+  transform: scale(0.9);
 }
 </style>

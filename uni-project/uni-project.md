@@ -129,6 +129,19 @@
 | `u-ps-center` |   垂直水平居中    | `top:50%;left:50%;transform:translate(-50%,-50%);` |
 |  `u-ps-full`  |   填充 充满元素   |          `top:0;left:0;right:0;bottom:0;`          |
 
+### c. transform 元素微调
+
+**语法： `u-tran-*`**
+
+|     类名      | 描述  |            原型键值对             |
+| :-----------: | :---: | :-------------------------------: |
+| `u-tran-def`  | 贴顶  |     `transform: translate(0)`     |
+|  `u-tran-50`  | 贴顶  |  `transform: translate(50%,50%)`  |
+| `u-tran--50`  | 贴顶  | `transform: translate(-50%,-50%)` |
+| `u-tran-x50`  | 贴顶  |   `transform: translateX(50%)`    |
+| `u-tran-x-50` | 贴顶  |   `transform: translateX(-50%)`   |
+| `u-tran-y50`  | 贴顶  |   `transform: translateY(50%)`    |
+| `u-tran-y-50` | 贴顶  |   `transform: translateY(-50%)`   |
 
 
 ## 5. 文字相关
@@ -642,9 +655,16 @@ Eg: `u-lh-1_2` 即 1.2 倍行高
 | `u-flex-as-c`  |    元素位于容器的中心[^as-4]    |  `flex-end`  |
 | `u-flex-as-b`  |   元素位于容器的基线上[^as-5]   |  `flex-end`  |
 
+### i. flex order排序
+
+**语法： `u-flex-o-*`**
+
+**// 原型属性名为 `order`**
+
+\*：1 ~ 15 范围内的整数，代表元素排列顺序，越小越靠前，越大越靠后
 
 
-### i. 弹性盒伸缩基准值
+### j. 弹性盒伸缩基准值
 
 **语法： `u-flex-basis-*`**
 
@@ -654,7 +674,7 @@ Eg: `u-lh-1_2` 即 1.2 倍行高
 
 
 
-### j. 弹性盒栅格化布局
+### h. 弹性盒栅格化布局
 
 **语法： `u-col-*`**
 

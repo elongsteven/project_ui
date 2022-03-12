@@ -4,9 +4,13 @@ export let prompt = promptAPI
 
 export const vPrint = function (...content) {
   // let trace = console.trace()
-  console.groupCollapsed(...content)
-  console.log(new Error().stack.split("\n")[2].trim())
-  console.groupEnd()
+  try {
+    console.groupCollapsed(...content)
+    console.log(new Error().stack.split("\n")[2].trim())
+    console.groupEnd()
+  } catch (e) {
+    console.log(...content)
+  }
 }
 // 异步缓存操作（仅获取信息和查值时需要使用async await）
 export let storage = {
