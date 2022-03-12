@@ -76,13 +76,25 @@ export default {
   name: "prompt",
   created() {
     // 每次创建监听器前先删除之前的监听器，防止串线
-    uni.$off("showPrompt")
-    uni.$off("hidePrompt")
+    // 出现的问题整理：
+    // 1. 如果每次注册前先清理，则物理返回到之前的页面时事件会消失
+    // 2. 如果用特殊防抖处理，会发现，uni的事件属性为异步函数！
+    // 测试方案：
+    // PLANT A: 注入一个API，在页面路由改变时重载监听
+    // PLANT B: 防抖（较复杂）
+    // uni.$off("showPrompt")
+    // uni.$off("hidePrompt")
     // 弹窗触发总线路
     uni.$on("showPrompt", opts => {
-      setTimeout(() => {
-        this.Engine(opts)
-      }, 100)
+       this.onArr.push(1)
+        console.log(this.onArr,new Date().getTime())
+      var ids
+      if (opts.id != ids) {
+        ids = opts.id
+        setTimeout(() => {
+          this.Engine(opts)
+        }, 100)
+      }
     })
     // 弹窗隐藏总线
     uni.$on("hidePrompt", param => {
@@ -95,6 +107,7 @@ export default {
   },
   data() {
     return {
+      onArr:[],
       MSG: { show: false },
       STAT: { show: false },
       LOAD: { show: false },
