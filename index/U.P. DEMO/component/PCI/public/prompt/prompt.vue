@@ -74,7 +74,7 @@
 <script>
 export default {
   name: "prompt",
-  created() {
+  mounted() {
     // 每次创建监听器前先删除之前的监听器，防止串线
     // 出现的问题整理：
     // 1. 如果每次注册前先清理，则物理返回到之前的页面时事件会消失
@@ -82,8 +82,8 @@ export default {
     // 测试方案：
     // PLANT A: 注入一个API，在页面路由改变时重载监听
     // PLANT B: 防抖（较复杂）
-    // uni.$off("showPrompt")
-    // uni.$off("hidePrompt")
+    uni.$off("showPrompt")
+    uni.$off("hidePrompt")
     // 弹窗触发总线路
     uni.$on("showPrompt", opts => {
        this.onArr.push(1)

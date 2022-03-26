@@ -41,6 +41,12 @@
       "style": {
         "navigationBarTitleText": "V"
       }
+    },
+    {
+      "path": "pages/msc/index",
+      "style": {
+        "navigationBarTitleText": "IM System"
+      }
     }
   ],
   "globalStyle": {
