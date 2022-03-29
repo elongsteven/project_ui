@@ -1,3 +1,26 @@
+/**
+ * Router Controller
+ */
+import Vue from "vue";
+import uniCrazyRouter from "@/component/crazy-router";
+Vue.use(uniCrazyRouter);
+
+uniCrazyRouter.beforeEach(async (to, from, next) => {
+  // 逻辑代码
+  vPrint(to, from);
+  next();
+});
+
+uniCrazyRouter.afterEach((to, from) => {
+  // 逻辑代码
+});
+
+uniCrazyRouter["on" + "Error"]((to, from) => {
+  // 逻辑代码
+});
+
+/* ------------------------------------------------------ */
+
 import { promptAPI } from "./public/prompt/prompt.js";
 
 export let prompt = promptAPI;
@@ -25,7 +48,7 @@ export let storage = {
       },
       fail: function () {
         this.vPrint(key, "异步写入失败");
-      },
+      }
     });
   },
   get: function (key) {
@@ -39,7 +62,7 @@ export let storage = {
         fail: function () {
           this.vPrint(key, "异步读取失败");
           resolve(false);
-        },
+        }
       });
     });
   },
@@ -52,7 +75,7 @@ export let storage = {
       },
       fail: function () {
         this.vPrint(key, "异步移除失败");
-      },
+      }
     });
   },
   info: function () {
@@ -64,13 +87,13 @@ export let storage = {
         fail: function () {
           this.vPrint("异步读取所有信息失败");
           resolve(false);
-        },
+        }
       });
     });
   },
   clear: function () {
     uni.clearStorage();
-  },
+  }
 };
 // 同步缓存操作
 export let storageSync = {
@@ -122,7 +145,7 @@ export let storageSync = {
       this.vPrint("同步清空失败:", e);
       return false;
     }
-  },
+  }
 };
 
 export let craft = {
@@ -140,7 +163,7 @@ export let craft = {
       i++;
     }
     return dataStr;
-  },
+  }
 };
 
 export let vRoute = {
@@ -169,7 +192,7 @@ export let vRoute = {
         url,
         fail: opts.fail && typeof opts.fail == "function" ? opts.fail : undefined,
         success: opts.success && typeof opts.success == "function" ? opts.success : undefined,
-        complete: opts.complete && typeof opts.complete == "function" ? opts.complete : undefined,
+        complete: opts.complete && typeof opts.complete == "function" ? opts.complete : undefined
       };
       if (from == "path") {
         rule.animationType = opts.animate && typeof opts.animate == "string" ? opts.animate : undefined;
@@ -208,5 +231,5 @@ export let vRoute = {
       else this.FIRST = false;
     }
     this.vPrint(page);
-  },
+  }
 };

@@ -9,26 +9,21 @@
 </template>
 
 <script>
-import Prompt from "@/component/PCI/public/prompt/prompt.vue"
-import Floater from "@/component/PCI/public/floater/floater.vue"
+import Prompt from "@/component/PCI/public/prompt/prompt.vue";
+import Floater from "@/component/PCI/public/floater/floater.vue";
 
 export default {
   name: "basic",
   components: { Prompt, Floater },
-  created() {
-    this.$print(161231564)
-  },
   data() {
-    return {
-      FIRST: true,
-    }
+    return {};
   },
   mounted() {
-    this.$print("mounted", getCurrentPages()[getCurrentPages().length - 1].route)
+    // this.$print("mounted", getCurrentPages()[getCurrentPages().length - 1].route);
     // let pages = getCurrentPages()[getCurrentPages().length - 1].route
     // this.$vRoute.set(pages, "created")
-  },
-}
+  }
+};
 </script>
 
 <style scoped></style>

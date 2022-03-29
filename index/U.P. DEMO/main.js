@@ -1,7 +1,7 @@
 import App from "./App"
 import PCIe from "@/component/PCI/PCIe.vue"
 import { prompt, vRoute, craft, vPrint, storage, storageSync } from "@/component/PCI/PCIe.js"
-import './router' // 引入路由
+// import './router' // 引入路由
 
 // #ifndef VUE3
 import Vue from "vue"

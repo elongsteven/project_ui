@@ -74,114 +74,102 @@
 <script>
 export default {
   name: "prompt",
+  // 每次创建监听器前先删除之前的监听器，防止串线
+  // 出现的问题整理：
+  // 1. 如果每次注册前先清理，则物理返回到之前的页面时事件会消失
+  // 2. 如果用特殊防抖处理，会发现，uni的事件属性为异步函数！
+  // 问题解析：原本为解决不同页面串线而设计的 uni.$off，如今却导致了物理返回后不能正常运作
+  // 解决方案：调取每个页面的唯一ID（路径）
   mounted() {
-    // 每次创建监听器前先删除之前的监听器，防止串线
-    // 出现的问题整理：
-    // 1. 如果每次注册前先清理，则物理返回到之前的页面时事件会消失
-    // 2. 如果用特殊防抖处理，会发现，uni的事件属性为异步函数！
-    // 测试方案：
-    // PLANT A: 注入一个API，在页面路由改变时重载监听
-    // PLANT B: 防抖（较复杂）
-    uni.$off("showPrompt")
-    uni.$off("hidePrompt")
+    let eventName = encodeURIComponent(getCurrentPages()[getCurrentPages().length - 1].route);
+    uni.$off("showPrompt_" + eventName);
+    uni.$off("hidePrompt_" + eventName);
     // 弹窗触发总线路
-    uni.$on("showPrompt", opts => {
-       this.onArr.push(1)
-        console.log(this.onArr,new Date().getTime())
-      var ids
-      if (opts.id != ids) {
-        ids = opts.id
-        setTimeout(() => {
-          this.Engine(opts)
-        }, 100)
-      }
-    })
+    uni.$on("showPrompt_" + eventName, opts => {
+      this.Engine(opts);
+    });
     // 弹窗隐藏总线
-    uni.$on("hidePrompt", param => {
-      this.Hidden(param.type)
-    })
-    // uni.$on("router", (from, to) => {
-    //   this.$print("router$on", from, to)
-    //   this.Hidden("all")
-    // })
+    uni.$on("hidePrompt_" + eventName, param => {
+      this.Hidden(param.type);
+    });
   },
   data() {
     return {
-      onArr:[],
+      onArr: [],
       MSG: { show: false },
       STAT: { show: false },
       LOAD: { show: false },
       MODAL: { show: false },
-      MINE: { show: false },
-    }
+      MINE: { show: false }
+    };
   },
   methods: {
     Engine(opts) {
       switch (opts.type) {
         case 0:
-          this.MSG = opts
-          break
+          this.MSG = opts;
+          break;
         case 1:
-          this.STAT = opts
-          break
+          this.STAT = opts;
+          break;
         case 2:
-          this.LOAD = opts
-          break
+          this.LOAD = opts;
+          break;
         case 3:
-          this.MODAL = opts
+          this.MODAL = opts;
           // modal弹窗 拓展功能
           this.MODAL.btnList.forEach((item, index) => {
-            if (item.time > 0) this.timer(index, this.MODAL.id)
-          })
-          if (this.MODAL.setTime > 0) this.autoEvent(this.MODAL.id)
-          break
+            if (item.time > 0) this.timer(index, this.MODAL.id);
+          });
+          if (this.MODAL.setTime > 0) this.autoEvent(this.MODAL.id);
+          break;
         case 4:
-          this.$print(opts)
-          this.MINE = opts
-          break
+          this.$print(opts);
+          this.MINE = opts;
+          break;
       }
     },
     Hidden(type) {
       // 隐藏指定弹框
       switch (type) {
         case 0:
-          if (this.MSG.cb) this.MSG.cb()
+          if (this.MSG.cb) this.MSG.cb();
           // this.MSG = { show: false }
-          this.MSG.show = false
-          break
+          this.MSG.show = false;
+          break;
         case 1:
-          if (this.STAT.cb) this.STAT.cb()
+          if (this.STAT.cb) this.STAT.cb();
           // this.STAT = { show: false }
-          this.STAT.show = false
-          break
+          this.STAT.show = false;
+          break;
         case 2:
-          if (this.LOAD.cb) this.LOAD.cb()
+          if (this.LOAD.cb) this.LOAD.cb();
           // this.LOAD = { show: false }
-          this.LOAD.show = false
-          break
+          this.LOAD.show = false;
+          break;
         case 3:
-          if (this.MODAL.cb) this.MODAL.cb()
+          if (this.MODAL.cb) this.MODAL.cb();
           // this.MODAL = { show: false }
-          this.MODAL.show = false
-          break
+          this.MODAL.show = false;
+          break;
         case 4:
-          if (this.MINE.cb) this.MINE.cb()
-          this.MINE.show = false
-          break
+          if (this.MINE.cb) this.MINE.cb();
+          this.MINE.show = false;
+          break;
         case "all":
-          if (this.MSG.cb) this.MSG.cb()
-          if (this.STAT.cb) this.STAT.cb()
-          if (this.LOAD.cb) this.LOAD.cb()
-          if (this.MODAL.cb) this.MODAL.cb()
-          if (this.MINE.cb) this.MINE.cb()
-          this.MSG.show = this.STAT.show = this.LOAD.show = this.MODAL.show = this.MINE.show = false
-          break
+          if (this.MSG.cb) this.MSG.cb();
+          if (this.STAT.cb) this.STAT.cb();
+          if (this.LOAD.cb) this.LOAD.cb();
+          if (this.MODAL.cb) this.MODAL.cb();
+          if (this.MINE.cb) this.MINE.cb();
+          this.MSG.show = this.STAT.show = this.LOAD.show = this.MODAL.show = this.MINE.show = false;
+          break;
       }
     },
     /* 内部使用 */
     maskTap(n) {
       // 蒙版功能 点击隐藏
-      if (n.isShut && n.show) this.Hidden(n.type)
+      if (n.isShut && n.show) this.Hidden(n.type);
     },
     /* Modal 功能拓展坞 */
     modalEvent(fn) {
@@ -190,29 +178,29 @@ export default {
       // if (fn) fn(() => {this.$prompt.hide(pid)})
       // else this.$prompt.hide(pid)
       /* 直接关闭 */
-      if (fn && this.MODAL.show) fn()
-      this.MODAL.show = false
+      if (fn && this.MODAL.show) fn();
+      this.MODAL.show = false;
     },
     timer(i, id) {
       setTimeout(() => {
-        if (!this.MODAL.show || this.MODAL.id !== id) return false // ID验证，防串线
-        this.MODAL.btnList[i].time--
-        if (this.MODAL.btnList[i].time > 0) this.timer(i, id)
-      }, 1000)
+        if (!this.MODAL.show || this.MODAL.id !== id) return false; // ID验证，防串线
+        this.MODAL.btnList[i].time--;
+        if (this.MODAL.btnList[i].time > 0) this.timer(i, id);
+      }, 1000);
     },
     autoEvent(id) {
       setTimeout(() => {
-        if (!this.MODAL.show || this.MODAL.id !== id) return false // ID验证，防串线
-        this.MODAL.setTime--
-        if (this.MODAL.setTime > 0) this.autoEvent(id)
+        if (!this.MODAL.show || this.MODAL.id !== id) return false; // ID验证，防串线
+        this.MODAL.setTime--;
+        if (this.MODAL.setTime > 0) this.autoEvent(id);
         else {
-          if (this.MODAL.setFn && this.MODAL.show) this.MODAL.setFn()
-          this.MODAL.show = false
+          if (this.MODAL.setFn && this.MODAL.show) this.MODAL.setFn();
+          this.MODAL.show = false;
         }
-      }, 1000)
+      }, 1000);
     },
-  },
-}
+  }
+};
 </script>
 
 <style scoped>
