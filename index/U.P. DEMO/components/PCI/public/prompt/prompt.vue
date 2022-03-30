@@ -74,12 +74,6 @@
 <script>
 export default {
   name: "prompt",
-  // 每次创建监听器前先删除之前的监听器，防止串线
-  // 出现的问题整理：
-  // 1. 如果每次注册前先清理，则物理返回到之前的页面时事件会消失
-  // 2. 如果用特殊防抖处理，会发现，uni的事件属性为异步函数！
-  // 问题解析：原本为解决不同页面串线而设计的 uni.$off，如今却导致了物理返回后不能正常运作
-  // 解决方案：调取每个页面的唯一ID（路径）
   mounted() {
     let eventName = encodeURIComponent(getCurrentPages()[getCurrentPages().length - 1].route);
     uni.$off("showPrompt_" + eventName);

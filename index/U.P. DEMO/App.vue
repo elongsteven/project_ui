@@ -14,5 +14,5 @@ export default {
 
 <style>
 /* css引入 */
-@import "../../uni-project/uni-project";
+@import "./static/uni-project/uni-project.min.css";
 </style>

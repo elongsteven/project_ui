@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import Prompt from "@/component/PCI/public/prompt/prompt.vue";
-import Floater from "@/component/PCI/public/floater/floater.vue";
+import Prompt from "@/components/PCI/public/prompt/prompt.vue";
+import Floater from "@/components/PCI/public/floater/floater.vue";
 
 export default {
   name: "basic",

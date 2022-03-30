@@ -78,11 +78,6 @@ export default {
     toggle() {
       this.showNav = !this.showNav
     },
-    // controller: function (type, data) {
-    //   if (type === "save") {
-
-    //   }
-    // },
   },
 }
 </script>

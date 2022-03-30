@@ -2,7 +2,7 @@
  * Router Controller
  */
 import Vue from "vue";
-import uniCrazyRouter from "@/component/crazy-router";
+import uniCrazyRouter from "@/components/crazy-router";
 Vue.use(uniCrazyRouter);
 
 uniCrazyRouter.beforeEach(async (to, from, next) => {
@@ -19,12 +19,30 @@ uniCrazyRouter["on" + "Error"]((to, from) => {
   // 逻辑代码
 });
 
-/* ------------------------------------------------------ */
+/* 全局功能 */
+export let craft = {
+  pageDataComp: function (obj) {
+    if (!obj || typeof obj === "object") {
+      console.warn("参数类型需为对象");
+      return "";
+    }
+    let dataStr = "";
+    let i = 0;
+    for (var key in data) {
+      if (i > 0) dataStr += "&";
+      else dataStr += "?";
+      dataStr += key + "=" + JSON.stringify(data[key]);
+      i++;
+    }
+    return dataStr;
+  }
+};
 
+/* 弹窗API */
 import { promptAPI } from "./public/prompt/prompt.js";
-
 export let prompt = promptAPI;
 
+/* 控制台打印 */
 export const vPrint = function (...content) {
   // let trace = console.trace()
   try {
@@ -35,7 +53,8 @@ export const vPrint = function (...content) {
     console.log(...content);
   }
 };
-// 异步缓存操作（仅获取信息和查值时需要使用async await）
+
+/* 异步缓存API（仅获取信息和查值时需要使用async await）*/
 export let storage = {
   set: function (key, val) {
     if (!key) key = "_temp";
@@ -95,7 +114,8 @@ export let storage = {
     uni.clearStorage();
   }
 };
-// 同步缓存操作
+
+/* 同步缓存API */
 export let storageSync = {
   set: function (key, val) {
     if (!key) key = "_temp";
@@ -148,24 +168,7 @@ export let storageSync = {
   }
 };
 
-export let craft = {
-  pageDataComp: function (obj) {
-    if (!obj || typeof obj === "object") {
-      console.warn("参数类型需为对象");
-      return "";
-    }
-    let dataStr = "";
-    let i = 0;
-    for (var key in data) {
-      if (i > 0) dataStr += "&";
-      else dataStr += "?";
-      dataStr += key + "=" + JSON.stringify(data[key]);
-      i++;
-    }
-    return dataStr;
-  }
-};
-
+/* 路由API（未完成）- 与原生不冲突 */
 export let vRoute = {
   FIRST: true,
   index: 0,

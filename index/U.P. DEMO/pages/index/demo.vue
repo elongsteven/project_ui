@@ -2,8 +2,6 @@
   <basic>
     <view slot="page">
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="goto">byebye</view>
-      <tester>12212112</tester>
-
       <view>测试文字 app 与 h5 的差异</view>
       <view class="u-f-1rp">1</view>
       <view class="u-f-2rp">2</view>
@@ -49,9 +47,7 @@
 </template>
 
 <script>
-import Tester from "@/component/demotest/demotest.vue"
 export default {
-  components: { Tester },
   data() {
     return {}
   },
