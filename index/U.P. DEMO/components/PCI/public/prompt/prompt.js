@@ -85,6 +85,7 @@ export let promptAPI = {
   // 手动关闭函数（不传参数时，先隐藏最后一个弹出的）
   hide: function (insId, eventName) {
     if (promptAPI.popArr.length === 0) return false;
+    if (!eventName) eventName = encodeURIComponent(getCurrentPages()[getCurrentPages().length - 1].route);
     // (!insId && typeof insId !== "number" && insId.trim() !== "") || typeof insId === "object"
     if (typeof insId !== "number") {
       let del = promptAPI.popArr.pop();
