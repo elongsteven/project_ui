@@ -1,5 +1,5 @@
 /** PROMPT | C: 2022-02-08 | by: Elong
- * last update: 2022-03-30 | Ver 1.16 RC */
+ * last update: 2022-03-30 | Ver 1.16 Stable */
 
 /* 对PCIe开放 */
 export let promptAPI = {
@@ -54,6 +54,7 @@ export let promptAPI = {
     craft.autoEngine(0);
     return promptAPI.ins;
   },
+  // 插槽弹窗
   mine: function (opts) {
     const PT = 4;
     // let setting = craft.settingEngine(view, opts, PT)

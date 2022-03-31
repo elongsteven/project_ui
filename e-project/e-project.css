@@ -12,7 +12,6 @@ html,
 body {
   padding: 0;
   margin: 0;
-
 }
 
 * {
@@ -21,13 +20,14 @@ body {
   box-sizing: border-box;
 }
 
-button:after {
-  border: none
-}
-
 button {
+  border: none;
   border-radius: 0;
   background-color: transparent;
+}
+
+button:focus {
+  outline: none;
 }
 
 a {

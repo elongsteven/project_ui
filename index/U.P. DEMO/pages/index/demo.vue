@@ -1,7 +1,8 @@
 <template>
   <basic>
     <view slot="page">
-      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="goto">byebye</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="goto">go to p1</view>
+      <view>这里跳转时执行了一个从1到16000的循环</view>
       <view>测试文字 app 与 h5 的差异</view>
       <view class="u-f-1rp">1</view>
       <view class="u-f-2rp">2</view>
