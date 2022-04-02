@@ -2,6 +2,13 @@
   <basic>
     <view slot="page">
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="goto">go to p1</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$xEvent.once('eee')">once eee</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$xEvent.once('aaa')">once aaa</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$xEvent.once('ccc')">once ccc</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$print($xEvent.list)">getList</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="$xEvent.emit('eee')">once eee</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="$xEvent.emit('aaa')">once aaa</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="$xEvent.emit('ccc')">once ccc</view>
       <view>这里跳转时执行了一个从1到16000的循环</view>
       <view>测试文字 app 与 h5 的差异</view>
       <view class="u-f-1rp">1</view>

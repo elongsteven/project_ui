@@ -7,17 +7,58 @@ Vue.use(uniCrazyRouter);
 
 uniCrazyRouter.beforeEach(async (to, from, next) => {
   // 逻辑代码
-  vPrint(to, from);
+  vPrint(from,to);
   next();
 });
 
 uniCrazyRouter.afterEach((to, from) => {
   // 逻辑代码
+  setTimeout(() => {
+    xEvent.emit("afterRoute", { to, from });
+  })
+  vPrint(from,to);
 });
 
 uniCrazyRouter["on" + "Error"]((to, from) => {
   // 逻辑代码
 });
+
+/* 指定页面的事件 */
+export let xEvent = {
+  pageId: function () {
+    return encodeURIComponent(getCurrentPages()[getCurrentPages().length - 1].route);
+  },
+  list: [],
+  emit: function (name, data) {
+    let eventID = this.pageId() + name;
+    uni.$emit(eventID, data);
+    let del_once = this.list.some(function (val, index) {
+      if (val.eventID === eventID && val.type === "once") this.list.splice(index, 1);
+      return val.eventID === eventID && val.type === "once";
+    }, this);
+  },
+  on: function (name, fn) {
+    let eventID = this.pageId() + name;
+    if (!fn) fn = function () {};
+    this.list.push({ name, type: "keep", page: decodeURIComponent(this.pageId()), fn, eventID });
+    uni.$on(eventID, fn);
+  },
+  once: function (name, fn) {
+    let eventID = this.pageId() + name;
+    if (!fn) fn = function () {};
+    this.list.push({ name, type: "once", page: decodeURIComponent(this.pageId()), fn, eventID });
+    uni.$once(eventID, fn);
+  },
+  off: function (name, fn) {
+    let eventID = this.pageId() + name;
+    if (!fn) fn = function () {};
+    uni.$off(eventID, fn);
+    let del_off = this.list.some(function (val, index) {
+      if (val.eventID === eventID) this.list.splice(index, 1);
+      return val.eventID === eventID;
+    }, this);
+  }
+};
 
 /* 全局功能 */
 export let craft = {

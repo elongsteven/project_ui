@@ -29,6 +29,7 @@
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="$prompt.hide()">关闭弹出的最后一个</view>
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="$prompt.hideAll('ccc')">关闭所有</view>
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="goto">go to DEMO</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="goto5">go to P5</view>
 
       <!-- <view class="u-h-100vh"></view> -->
       <!-- <view class="u-h-100vh"></view> -->
@@ -71,6 +72,9 @@ export default {
     goto() {
       uni.navigateTo({ url: "/pages/index/demo" })
       // console.log("route", this.$route)
+    },
+    goto5(){
+      uni.navigateTo({ url: "/pages/index/p5" })
     },
     t1() {
       console.log(this.$prompt.msg("111", { isPass: true, time: 10000 }))

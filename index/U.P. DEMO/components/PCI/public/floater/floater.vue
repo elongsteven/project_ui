@@ -17,7 +17,6 @@
 <script>
 export default {
   name: "floater",
-  created() {},
   data() {
     return {
       isFixed: true, // 是否自动贴边
@@ -30,56 +29,59 @@ export default {
       moveY: 20,
       showNav: false,
       topPart: false,
-      NavButtons: ["一点\n百通", "测一测", "绿色\n商城", "产品\n分类", "购物车", "我的\n上大夫", "转发\n分享"],
-    }
+      NavButtons: ["一点\n百通", "测一测", "绿色\n商城", "产品\n分类", "购物车", "我的\n上大夫", "转发\n分享"]
+    };
   },
   created() {
-    const { windowWidth, windowHeight } = uni.getSystemInfoSync()
-    this.windowSize[0] = windowWidth
-    this.windowSize[1] = windowHeight
-    this.moveX = this.size[0] / 2 + this.safeDist[0]
-    this.moveY = this.size[1] / 2 + this.safeDist[1]
-    let FLOATER = this.$storageSync.get("_FLOATER_")
-    this.$print(FLOATER)
-    if (FLOATER) {
-      this.moveX = FLOATER[0]
-      this.moveY = FLOATER[1]
-    }
-    if (this.moveY < this.windowSize[1] / 2) this.topPart = true
-    else this.topPart = false
+    const { windowWidth, windowHeight } = uni.getSystemInfoSync();
+    this.windowSize[0] = windowWidth;
+    this.windowSize[1] = windowHeight;
+    this.moveX = this.size[0] / 2 + this.safeDist[0];
+    this.moveY = this.size[1] / 2 + this.safeDist[1];
+    this.$xEvent.off("afterRoute");
+    this.$xEvent.on("afterRoute", () => {
+      let FLOATER = this.$storageSync.get("_FLOATER_");
+      // this.$print(FLOATER);
+      if (FLOATER) {
+        this.moveX = FLOATER[0];
+        this.moveY = FLOATER[1];
+      }
+      if (this.moveY < this.windowSize[1] / 2) this.topPart = true;
+      else this.topPart = false;
+    });
   },
   methods: {
     gotElem: function (event) {
       // 按上去时计算相对于元素的偏移量
-      this.skew[0] = event.touches[0].clientX - this.moveX
-      this.skew[1] = event.touches[0].clientY - this.moveY
+      this.skew[0] = event.touches[0].clientX - this.moveX;
+      this.skew[1] = event.touches[0].clientY - this.moveY;
     },
     dragging: function (event) {
       // 偏移量运算，保证拖动的一瞬间不位移
-      let tag = event.touches
-      this.moveX = tag[0].clientX - this.skew[0]
-      this.moveY = tag[0].clientY - this.skew[1]
+      let tag = event.touches;
+      this.moveX = tag[0].clientX - this.skew[0];
+      this.moveY = tag[0].clientY - this.skew[1];
       // 屏幕安全边距
-      if (this.moveX < this.size[0] / 2 + this.safeDist[0]) this.moveX = this.size[0] / 2 + this.safeDist[0] // left
-      if (this.moveY < this.size[1] / 2 + this.safeDist[1]) this.moveY = this.size[1] / 2 + this.safeDist[1] // top
-      if (this.moveX > this.windowSize[0] - this.size[0] / 2 - this.safeDist[0]) this.moveX = this.windowSize[0] - this.size[0] / 2 - this.safeDist[0] // right
-      if (this.moveY > this.windowSize[1] - this.size[1] / 2 - this.safeDist[1]) this.moveY = this.windowSize[1] - this.size[1] / 2 - this.safeDist[1] // bottom
-      if (this.showNav) this.showNav = false
+      if (this.moveX < this.size[0] / 2 + this.safeDist[0]) this.moveX = this.size[0] / 2 + this.safeDist[0]; // left
+      if (this.moveY < this.size[1] / 2 + this.safeDist[1]) this.moveY = this.size[1] / 2 + this.safeDist[1]; // top
+      if (this.moveX > this.windowSize[0] - this.size[0] / 2 - this.safeDist[0]) this.moveX = this.windowSize[0] - this.size[0] / 2 - this.safeDist[0]; // right
+      if (this.moveY > this.windowSize[1] - this.size[1] / 2 - this.safeDist[1]) this.moveY = this.windowSize[1] - this.size[1] / 2 - this.safeDist[1]; // bottom
+      if (this.showNav) this.showNav = false;
     },
     fixed: function () {
-      if (!this.isFixed) return false // 自动贴边开关，下方是松手时自动定位
-      if (this.moveX > this.windowSize[0] / 2) this.moveX = this.windowSize[0] - this.size[0] / 2 - this.safeDist[0]
-      else this.moveX = this.size[0] / 2 + this.safeDist[0]
-      if (this.moveY < this.windowSize[1] / 2) this.topPart = true
-      else this.topPart = false
-      this.$storageSync.set("_FLOATER_", [this.moveX, this.moveY])
-      this.$print([this.moveX, this.moveY])
+      if (!this.isFixed) return false; // 自动贴边开关，下方是松手时自动定位
+      if (this.moveX > this.windowSize[0] / 2) this.moveX = this.windowSize[0] - this.size[0] / 2 - this.safeDist[0];
+      else this.moveX = this.size[0] / 2 + this.safeDist[0];
+      if (this.moveY < this.windowSize[1] / 2) this.topPart = true;
+      else this.topPart = false;
+      this.$storageSync.set("_FLOATER_", [this.moveX, this.moveY]);
+      this.$print([this.moveX, this.moveY]);
     },
     toggle() {
-      this.showNav = !this.showNav
-    },
-  },
-}
+      this.showNav = !this.showNav;
+    }
+  }
+};
 </script>
 
 <style scoped>

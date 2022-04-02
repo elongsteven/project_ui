@@ -1,6 +1,6 @@
 import App from "./App"
 import PCIe from "@/components/PCI/PCIe.vue"
-import { prompt, vRoute, craft, vPrint, storage, storageSync } from "@/components/PCI/PCIe.js"
+import { prompt, vRoute, craft, vPrint, storage, storageSync, xEvent } from "@/components/PCI/PCIe.js"
 // import './router' // 引入路由
 
 // #ifndef VUE3
@@ -12,6 +12,7 @@ Vue.prototype.$prompt = prompt // 注册方法
 Vue.prototype.$vRoute = vRoute
 Vue.prototype.$storage = storage
 Vue.prototype.$storageSync = storageSync
+Vue.prototype.$xEvent = xEvent
 Vue.prototype.$craft = craft
 App.mpType = "app"
 const app = new Vue({
