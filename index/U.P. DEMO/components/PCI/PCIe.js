@@ -7,7 +7,7 @@ Vue.use(uniCrazyRouter);
 
 uniCrazyRouter.beforeEach(async (to, from, next) => {
   // 逻辑代码
-  vPrint(from,to);
+  vPrint(from, to);
   next();
 });
 
@@ -15,8 +15,8 @@ uniCrazyRouter.afterEach((to, from) => {
   // 逻辑代码
   setTimeout(() => {
     xEvent.emit("afterRoute", { to, from });
-  })
-  vPrint(from,to);
+  });
+  vPrint(from, to);
 });
 
 uniCrazyRouter["on" + "Error"]((to, from) => {
@@ -32,7 +32,7 @@ export let xEvent = {
   emit: function (name, data) {
     let eventID = this.pageId() + name;
     uni.$emit(eventID, data);
-    let del_once = this.list.some(function (val, index) {
+    this.list.some(function (val, index) {
       if (val.eventID === eventID && val.type === "once") this.list.splice(index, 1);
       return val.eventID === eventID && val.type === "once";
     }, this);
@@ -40,13 +40,13 @@ export let xEvent = {
   on: function (name, fn) {
     let eventID = this.pageId() + name;
     if (!fn) fn = function () {};
-    this.list.push({ name, type: "keep", page: decodeURIComponent(this.pageId()), fn, eventID });
+    this.list.push({ name, type: "keep", path: decodeURIComponent(this.pageId()), fn, eventID });
     uni.$on(eventID, fn);
   },
   once: function (name, fn) {
     let eventID = this.pageId() + name;
     if (!fn) fn = function () {};
-    this.list.push({ name, type: "once", page: decodeURIComponent(this.pageId()), fn, eventID });
+    this.list.push({ name, type: "once", path: decodeURIComponent(this.pageId()), fn, eventID });
     uni.$once(eventID, fn);
   },
   off: function (name, fn) {

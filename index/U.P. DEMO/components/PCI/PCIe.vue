@@ -4,7 +4,7 @@
     <!-- 用户视图 -->
     <slot name="page"></slot>
     <prompt><slot name="pop"></slot></prompt>
-    <floater></floater>
+    <floater v-if="floater.show"></floater>
   </view>
 </template>
 
@@ -16,12 +16,21 @@ export default {
   name: "basic",
   components: { Prompt, Floater },
   data() {
-    return {};
+    return {
+      floater: {
+        show: true, // 悬浮按钮 白名单模式
+        whiteList: ["demo"]
+      }
+    };
   },
   mounted() {
-    // this.$print("mounted", getCurrentPages()[getCurrentPages().length - 1].route);
-    // let pages = getCurrentPages()[getCurrentPages().length - 1].route
-    // this.$vRoute.set(pages, "created")
+    this.$xEvent.off("afterRoute");
+    this.$xEvent.on("afterRoute", data => {
+      let isHide = this.floater.whiteList.some(function (val) {
+        return data.to.url.search(val) > -1;
+      }, this);
+      if (isHide) this.floater.show = false;
+    });
   }
 };
 </script>
