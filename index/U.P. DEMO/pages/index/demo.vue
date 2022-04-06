@@ -57,7 +57,7 @@
 <script>
 export default {
   data() {
-    return {}
+    return {};
   },
   onReady() {
     this.$prompt.modal(
@@ -69,23 +69,23 @@ export default {
         lineColor: "#fff",
         btn: [
           { key: "Delete", style: { color: "#999" }, fn: this.fn1 },
-          { key: "Cancel", fn: this.fn1, time: 10 },
-        ],
+          { key: "Cancel", fn: this.fn1, time: 10 }
+        ]
       }
-    )
+    );
   },
   methods: {
     goto() {
       this.$vRoute.path("/pages/index/p1", {
         fn: function () {
           for (var i = 0; i < 16000; i++) {
-            console.log(i)
+            console.log(i);
           }
-        },
-      })
-    },
-  },
-}
+        }
+      });
+    }
+  }
+};
 </script>
 
 <style></style>

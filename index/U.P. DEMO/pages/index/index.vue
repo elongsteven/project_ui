@@ -9,8 +9,8 @@
           $prompt.msg('hello project-ui', {
             isPass: true,
             cb: function () {
-              $prompt.success('cb', { isPass: true })
-            },
+              $prompt.success('cb', { isPass: true });
+            }
           })
         "
       >
@@ -43,18 +43,18 @@
 export default {
   data() {
     return {
-      popTest: "",
-    }
+      popTest: ""
+    };
   },
   onReady() {
     // this.myModal()
   },
   methods: {
     demo() {
-      this.$prompt.msg("qwerty")
+      this.$prompt.msg("qwerty");
     },
     myModal() {
-      console.log(this.$prompt)
+      console.log(this.$prompt);
       this.$prompt.modal(
         { title: "加载中", desc: "请稍后..." },
         {
@@ -64,45 +64,45 @@ export default {
           lineColor: "#000",
           btn: [
             { key: "Delete", style: { color: "#999" }, fn: this.fn1 },
-            { key: "Cancel", fn: this.fn1, time: 30 },
-          ],
+            { key: "Cancel", fn: this.fn1, time: 30 }
+          ]
         }
-      )
+      );
     },
     goto() {
-      uni.navigateTo({ url: "/pages/index/demo" })
+      uni.navigateTo({ url: "/pages/index/demo" });
       // console.log("route", this.$route)
     },
-    goto5(){
-      uni.navigateTo({ url: "/pages/index/p5" })
+    goto5() {
+      uni.navigateTo({ url: "/pages/index/p5" });
     },
     t1() {
-      console.log(this.$prompt.msg("111", { isPass: true, time: 10000 }))
+      console.log(this.$prompt.msg("111", { isPass: true, time: 10000 }));
     },
     t2() {
-      this.popTest = this.$prompt.msg("222", { isPass: true, time: 10000 })
+      this.popTest = this.$prompt.msg("222", { isPass: true, time: 10000 });
     },
     t3() {
-      this.$prompt.msg("333", { isPass: true, time: 10000 })
+      this.$prompt.msg("333", { isPass: true, time: 10000 });
     },
     ttt() {
-      console.log(this.popTest)
-      this.$prompt.hide(this.popTest)
+      console.log(this.popTest);
+      this.$prompt.hide(this.popTest);
     },
     test(a) {
-      console.log(this.$prompt.getOpt())
+      console.log(this.$prompt.getOpt());
     },
     fn1(hide) {
-      console.log("aaa")
+      console.log("aaa");
     },
     fn2(e) {
-      console.log("事件2")
+      console.log("事件2");
     },
     fn3() {
-      console.log("第三个事件")
-    },
-  },
-}
+      console.log("第三个事件");
+    }
+  }
+};
 </script>
 
 <style>

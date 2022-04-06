@@ -192,7 +192,7 @@ export default {
           this.MODAL.show = false;
         }
       }, 1000);
-    },
+    }
   }
 };
 </script>

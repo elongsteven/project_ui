@@ -10,18 +10,18 @@
 <script>
 export default {
   data() {
-    return {}
+    return {};
   },
   onReady() {},
   onLoad(options) {
-    console.log(options)
+    console.log(options);
   },
   methods: {
     goto() {
-      this.$vRoute.path("/pages/index/p2")
-    },
-  },
-}
+      this.$vRoute.path("/pages/index/p2");
+    }
+  }
+};
 </script>
 
 <style></style>
