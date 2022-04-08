@@ -14,6 +14,7 @@ Vue.prototype.$storage = storage;
 Vue.prototype.$storageSync = storageSync;
 Vue.prototype.$xEvent = xEvent;
 Vue.prototype.$craft = craft;
+
 App.mpType = "app";
 const app = new Vue({
   ...App
