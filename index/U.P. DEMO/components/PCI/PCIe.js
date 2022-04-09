@@ -208,12 +208,76 @@ export let storageSync = {
 
 /* 路由API（未完成）- 与原生不冲突 */
 export let vRoute = {
-  FIRST: true,
-  index: 0,
-  history: [],
+  _time: 1000,
+  _antiShake: false,
+  antiShaker: function (fn, param) {
+    if (!this._antiShake) {
+      this._antiShake = true;
+      fn(param);
+      setTimeout(() => {
+        this._antiShake = false;
+      }, this._time);
+    }
+  },
+  // 跳转 (打开一个新页面)
+  path(url, opts) {
+    let rule = this.computer(url, opts, "path");
+    this.antiShaker(uni.navigateTo, rule);
+  },
+  // 替换 (关闭当前页面，打开新页面)
+  replace: function (url, opts) {
+    let rule = this.computer(url, opts, "replace");
+    this.antiShaker(uni.redirectTo, rule);
+  },
+  // 重启 (打开新页面，关闭所有页面)
+  launch: function (url, opts) {
+    let rule = this.computer(url, opts, "launch");
+    this.antiShaker(uni.reLaunch, rule);
+  },
+  // Tab栏跳转
+  tab: function (url, opts) {
+    let rule = this.computer(url, opts, "tab");
+    this.antiShaker(uni.switchTab, rule);
+  },
+  // 返回上一页
+  back: function (delta, opts) {
+    let rule = this.computer(delta, opts, "back");
+    this.antiShaker(uni.redirectTo, rule);
+  },
+  // 预加载页面
+  load: function (url, opts) {
+    let rule = this.computer(url, opts, "load");
+    this.antiShaker(uni.preloadPage, rule);
+  },
+  // 获取当前所有激活的页面
+  getAlive: function () {
+    let allAlivePage = getCurrentPages();
+    let list = [];
+    allAlivePage.forEach(pageConfig => {
+      list.push(pageConfig.route);
+    });
+    return list;
+  },
+  // 获取前几页的页面路径
+  getPre: num => {
+    if (!num) num = 1;
+    num = num + 1;
+    let pages = getCurrentPages();
+    let prePage;
+    try {
+      prePage = pages[pages.length - num].route;
+    } catch (e) {
+      prePage = undefined;
+    }
+    // #ifdef H5
+    return prePage;
+    // #endif
+    return prePage.$vm;
+  },
+  // 公用: 计算属性
   computer: function (url, opts, type) {
     let routes = getCurrentPages();
-    uni.$emit("router", { from: routes[routes.length - 1].route, to: url });
+    // if (url.substring(0, 1) != "/") url = "/" + url;
     if (!opts) opts = {};
     let rule = {
       url,
@@ -226,8 +290,10 @@ export let vRoute = {
       rule.animationDuration = opts.time && typeof opts.time == "number" ? opts.time : undefined;
       if (type == "path") rule.events = opts.events && typeof opts.events == "object" ? opts.events : undefined;
     }
+    uni.$emit("router", { from: routes[routes.length - 1].route, to: url });
     return rule;
   },
+  // 公用: 计算对象转URL参数
   pageDataComp: function (obj) {
     if (!obj || typeof obj === "object") {
       console.warn("参数类型需为对象");
@@ -242,29 +308,7 @@ export let vRoute = {
       i++;
     }
     return dataStr;
-  },
-  path(url, opts) {
-    let rule = this.computer(url, opts, "path");
-    uni.navigateTo(rule);
-  },
-  replace: function (url, opts) {
-    let rule = this.computer(url, opts, "replace");
-    uni.redirectTo(rule);
-  },
-  launch: function (url, opts) {
-    let rule = this.computer(url, opts, "launch");
-    uni.reLaunch(rule);
-  },
-  tab: function (url, opts) {
-    let rule = this.computer(url, opts, "tab");
-    uni.switchTab(rule);
-  },
-  back: function (delta, opts) {
-    let rule = this.computer(delta, opts, "back");
-    uni.redirectTo(rule);
-  },
-  load: function (url, opts) {
-    let rule = this.computer(url, opts, "load");
-    uni.preloadPage(rule);
   }
+  //URL路径判断
+  //获取当前页面所有参数
 };
