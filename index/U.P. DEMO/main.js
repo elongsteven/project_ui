@@ -9,7 +9,7 @@ Vue.config.productionTip = false;
 Vue.component("basic", PCIe); // 引入全局组件 2.x
 Vue.prototype.$print = vPrint;
 Vue.prototype.$prompt = prompt; // 注册方法
-Vue.prototype.$vRoute = vRoute;
+Vue.prototype.$_router = vRoute;
 Vue.prototype.$storage = storage;
 Vue.prototype.$storageSync = storageSync;
 Vue.prototype.$xEvent = xEvent;

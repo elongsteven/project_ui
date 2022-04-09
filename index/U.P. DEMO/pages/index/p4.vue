@@ -2,6 +2,7 @@
   <basic>
     <view slot="page">
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-success" @click="goto">go to p5</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="$storageSync.remove('_FLOATER_')">清除悬浮窗定位</view>
     </view>
   </basic>
 </template>
@@ -11,10 +12,12 @@ export default {
   data() {
     return {}
   },
-  onReady() {},
+  onReady() {
+    console.log(this.$_router)
+  },
   methods: {
     goto() {
-      this.$vRoute.path("/pages/index/p5")
+      this.$_router.path("/pages/index/p5")
     },
   },
 }

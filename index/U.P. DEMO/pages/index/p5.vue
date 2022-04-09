@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     goto() {
-      this.$vRoute.path("/pages/index/index");
+      this.$_router.path("/pages/index/index");
     },
     font(size) {
       return `${size}px bold arial, 微软雅黑, sans-serif`;

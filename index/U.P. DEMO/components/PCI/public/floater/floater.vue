@@ -33,11 +33,15 @@ export default {
     };
   },
   created() {
+    // 初始化获取设备宽高
     const { windowWidth, windowHeight } = uni.getSystemInfoSync();
     this.windowSize[0] = windowWidth;
     this.windowSize[1] = windowHeight;
-    this.moveX = this.size[0] / 2 + this.safeDist[0];
-    this.moveY = this.size[1] / 2 + this.safeDist[1];
+    // 悬浮窗位置初始化
+    // this.moveX = this.size[0] / 2 + this.safeDist[0]; // X: 贴右侧
+    this.moveX = windowWidth - (this.size[0] / 2 + this.safeDist[0]); // X: 贴左侧
+    // this.moveY = this.size[1] / 2 + this.safeDist[1]; // Y: 贴顶部
+    this.moveY = windowHeight - (windowWidth/3) - (this.size[1] / 2 + this.safeDist[1]); // Y: 高度 - 三分之一宽度
     this.$xEvent.off("afterRoute");
     this.$xEvent.on("afterRoute", () => {
       let FLOATER = this.$storageSync.get("_FLOATER_");

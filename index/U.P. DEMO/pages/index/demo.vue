@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     goto() {
-      this.$vRoute.path("/pages/index/p1", {
+      this.$_router.path("/pages/index/p1", {
         fn: function () {
           for (var i = 0; i < 16000; i++) {
             console.log(i);

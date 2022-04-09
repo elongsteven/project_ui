@@ -14,7 +14,7 @@ export default {
   onReady() {},
   methods: {
     goto() {
-      this.$vRoute.path("/pages/index/p3")
+      this.$_router.path("/pages/index/p3")
     },
   },
 }

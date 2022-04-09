@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     goto() {
-      this.$vRoute.path("/pages/index/p2");
+      this.$_router.path("/pages/index/p2");
     }
   }
 };

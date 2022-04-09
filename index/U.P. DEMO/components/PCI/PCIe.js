@@ -62,20 +62,17 @@ export let xEvent = {
 
 /* 全局功能 */
 export let craft = {
-  pageDataComp: function (obj) {
-    if (!obj || typeof obj === "object") {
-      console.warn("参数类型需为对象");
-      return "";
-    }
-    let dataStr = "";
-    let i = 0;
-    for (var key in data) {
-      if (i > 0) dataStr += "&";
-      else dataStr += "?";
-      dataStr += key + "=" + JSON.stringify(data[key]);
-      i++;
-    }
-    return dataStr;
+  asyncFunc: function (Fn, thenFn, catchFn) {
+    return new Promise((resolve, reject) => {
+      let returns = Fn();
+      setTimeout(() => {
+        resolve(returns);
+      });
+    })
+      .then(thenFn())
+      .catch(error => {
+        catchFn(error);
+      });
   }
 };
 
@@ -214,66 +211,60 @@ export let vRoute = {
   FIRST: true,
   index: 0,
   history: [],
-  executor: function (methods) {
-    return new Promise((resolve, reject) => {
-      let returns = methods();
-      setTimeout(() => {
-        resolve(returns);
-      });
-      // .then(() => {
-      // })
-      // .catch(error => {
-      //   reject(error)
-      // })
-    });
+  computer: function (url, opts, type) {
+    let routes = getCurrentPages();
+    uni.$emit("router", { from: routes[routes.length - 1].route, to: url });
+    if (!opts) opts = {};
+    let rule = {
+      url,
+      complete: opts.complete && typeof opts.complete == "function" ? opts.complete : undefined,
+      fail: opts.fail && typeof opts.fail == "function" ? opts.fail : undefined
+    };
+    if (type != "load") rule.success = opts.success && typeof opts.success == "function" ? opts.success : undefined;
+    if (type == "path" || type == "back") {
+      rule.animationType = opts.animate && typeof opts.animate == "string" ? opts.animate : undefined;
+      rule.animationDuration = opts.time && typeof opts.time == "number" ? opts.time : undefined;
+      if (type == "path") rule.events = opts.events && typeof opts.events == "object" ? opts.events : undefined;
+    }
+    return rule;
   },
-  computer: function (url, opts, from) {
-    return new Promise(resolve => {
-      let routes = getCurrentPages();
-      uni.$emit("router", { from: routes[routes.length - 1].route, to: url });
-      if (!opts) opts = {};
-      let rule = {
-        url,
-        fail: opts.fail && typeof opts.fail == "function" ? opts.fail : undefined,
-        success: opts.success && typeof opts.success == "function" ? opts.success : undefined,
-        complete: opts.complete && typeof opts.complete == "function" ? opts.complete : undefined
-      };
-      if (from == "path") {
-        rule.animationType = opts.animate && typeof opts.animate == "string" ? opts.animate : undefined;
-        rule.animationDuration = opts.time && typeof opts.time == "number" ? opts.time : undefined;
-        rule.events = opts.events && typeof opts.events == "object" ? opts.events : undefined;
-        resolve(rule);
-      } else resolve(rule);
-    });
+  pageDataComp: function (obj) {
+    if (!obj || typeof obj === "object") {
+      console.warn("参数类型需为对象");
+      return "";
+    }
+    let dataStr = "";
+    let i = 0;
+    for (var key in data) {
+      if (i > 0) dataStr += "&";
+      else dataStr += "?";
+      dataStr += key + "=" + JSON.stringify(data[key]);
+      i++;
+    }
+    return dataStr;
   },
-  async path(url, opts) {
-    let rule = await this.computer(url, opts, "path");
-    if (opts && opts.fn) await this.executor(opts.fn);
+  path(url, opts) {
+    let rule = this.computer(url, opts, "path");
     uni.navigateTo(rule);
   },
-  replace: function (url, param) {
-    uni.redirectTo({ url });
+  replace: function (url, opts) {
+    let rule = this.computer(url, opts, "replace");
+    uni.redirectTo(rule);
   },
-  launch: function (url, param) {
-    uni.reLaunch({ url });
+  launch: function (url, opts) {
+    let rule = this.computer(url, opts, "launch");
+    uni.reLaunch(rule);
   },
-  tab: function (url, param) {
-    uni.switchTab({ url });
+  tab: function (url, opts) {
+    let rule = this.computer(url, opts, "tab");
+    uni.switchTab(rule);
   },
-  back: function (delta, param) {},
-  load: function (url, param) {},
-  change: function (from, to) {
-    // uni.$emit("router", { from, to })
-    // if (this.index === 0) this.history.push(from)
-    // if (this.history[this.index - 1] === from) this.history.push(to)
-    // this.index++
-    // this.vPrint(this.index, this.history)
+  back: function (delta, opts) {
+    let rule = this.computer(delta, opts, "back");
+    uni.redirectTo(rule);
   },
-  set: function (page, from) {
-    if (from === "created") {
-      if (!this.FIRST) return false;
-      else this.FIRST = false;
-    }
-    this.vPrint(page);
+  load: function (url, opts) {
+    let rule = this.computer(url, opts, "load");
+    uni.preloadPage(rule);
   }
 };
