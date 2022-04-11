@@ -23,7 +23,7 @@
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-warning" @click="$prompt.question('question')">question 弹框</view>
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-danger" @click="$prompt.error('fail')">error 弹框</view>
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.status('请稍后...', { isRow: true }, '../../static/await.png')">自定义status 弹框</view>
-      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.status('请稍后...', { isRow: true,iconColor:'#f00',spacing:'3px' }, '../../static/pci_icon/question.png')">status自定义颜色</view>
+      <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.status('请稍后...', { isRow: true, iconColor: '#f00', spacing: '3px' }, '../../static/pci_icon/question.png')">status自定义颜色</view>
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.load('加载中...', { time: 0, isPass: true })">load加载层</view>
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="myModal">modal 交互弹框</view>
       <view class="u-mg-t-16rp u-pd-tb-15rp u-btn u-btn-info" @click="$prompt.mine()">mine 自定义弹窗</view>
