@@ -19,7 +19,7 @@
       <view @click.stop class="prompt0 u-ps-f u-ps-center u-flex u-flex-jc-c u-flex-ai-c u-pd-lr-18rp u-pd-tb-15rp u-t-break u-radius-8rp u-pe-auto" :class="STAT.PromptClass" :style="STAT.PromptStyle">
         <!-- image+ -->
         <image v-if="STAT.IconUrl" :src="STAT.IconUrl" class="colors u-mg-lr-auto" :class="STAT.IconClass" :style="STAT.IconStyle" mode="widthFix" />
-        <view class="u-w-fit u-mg-lr-auto">{{ STAT.txt }}</view>
+        <view class="u-w-fit u-mg-lr-auto" :style="{ marginLeft: STAT.spacing }">{{ STAT.txt }}</view>
       </view>
     </uni-transition>
     <!-- load -->

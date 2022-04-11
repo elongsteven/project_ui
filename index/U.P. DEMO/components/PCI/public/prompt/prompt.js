@@ -156,6 +156,7 @@ let craft = {
       initialOpt.IconStyle = "width:" + (formatOpt.iconWidth || "80rpx") + (formatOpt.iconColor ? ";filter: drop-shadow(100vw 0 " + formatOpt.iconColor + ");right: 100vw" : "") + ";" + (formatOpt.iconStyle || "");
       initialOpt.IconUrl = others !== undefined ? (typeof others === "number" ? promptAPI.icons[others] : others) : null;
       initialOpt.IconClass = "u-mg-8rp" + (formatOpt.iconClass || "");
+      initialOpt.spacing = formatOpt.spacing || "0";
     } else if (initialOpt.type === 2) {
       // loading 加载层附加属性
       initialOpt.LoadClass = "u-mg-24rp" + (formatOpt.loadClass || "");
